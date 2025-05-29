@@ -1210,7 +1210,7 @@
           { 
             title: 'نقاط الحفظ', 
             value: d.hifdh.toFixed(2),
-            desc: 'من أصل 60 نقطة'
+            desc: 'من أصل 65 نقطة'
           }
         ];
         
@@ -1334,7 +1334,7 @@
         d.delay = d.late >= 180 ? 0 : (1 - d.late / 180) * 10;
 
         // حساب النقاط النهائية
-        d.hifdh = Math.max(0, 60 - d.penDetails.reduce((s, p) => s + p.totalPenalty, 0));
+        d.hifdh = Math.max(0, 65 - d.penDetails.reduce((s, p) => s + p.totalPenalty, 0));
         d.total = +(((d.adab + d.delay + d.hifdh + d.focus + (d.mushaf ? 2 : 0))).toFixed(2));
         studentData[current] = d;
         document.getElementById('result').textContent = d.total + '%';
