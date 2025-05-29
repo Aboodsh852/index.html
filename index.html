@@ -1335,7 +1335,7 @@
 
         // حساب النقاط النهائية
         d.hifdh = Math.max(0, 60 - d.penDetails.reduce((s, p) => s + p.totalPenalty, 0));
-        d.total = +(((d.adab + d.delay + d.hifdh + d.focus + (d.mushaf ? 2 : 0)) / 95 * 100).toFixed(2));
+        d.total = +(((d.adab + d.delay + d.hifdh + d.focus + (d.mushaf ? 2 : 0)).toFixed(2));
         studentData[current] = d;
         document.getElementById('result').textContent = d.total + '%';
         document.getElementById('progressBar').style.width = d.total + '%';
