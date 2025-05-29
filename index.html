@@ -1073,7 +1073,7 @@
 
       // إعداد خيارات الوقت
       for (let h = 5; h <= 8; h++) {
-        [0, 15, 30, 45].forEach(m => {
+        [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55].forEach(m => {
           if (h === 8 && m > 30) return;
           let v = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
           let o = document.createElement('option');
