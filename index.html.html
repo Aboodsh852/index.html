@@ -1,0 +1,1629 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نظام التقييم القرآني المتطور - رجال مؤمنون</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
+    
+    :root {
+      --primary: #1a5f5a;
+      --primary-dark: #0d4a45;
+      --primary-light: #2d8c85;
+      --accent: #3498db;
+      --accent-dark: #2980b9;
+      --gold: #d4af37;
+      --gold-light: #f1e5ac;
+      --dark: #2c3e50;
+      --light: #ecf0f1;
+      --white: #ffffff;
+      --gray: #95a5a6;
+      --success: #27ae60;
+      --warning: #f39c12;
+      --danger: #e74c3c;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      --radius: 12px;
+      --gap: 1.5rem;
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Tajawal', sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      color: var(--dark);
+      position: relative;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    .app {
+      display: flex;
+      min-height: 100vh;
+      max-width: 1800px;
+      margin: 0 auto;
+      box-shadow: var(--shadow);
+    }
+
+    /* الشريط الجانبي */
+    .sidebar {
+      width: 300px;
+      flex-shrink: 0;
+      background: linear-gradient(to bottom, var(--primary-dark), var(--primary));
+      box-shadow: 5px 0 20px rgba(0, 0, 0, 0.2);
+      position: relative;
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    .sidebar::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><text x="50%" y="50%" font-family="Amiri" font-size="24" fill="rgba(255,255,255,0.05)" text-anchor="middle" dominant-baseline="middle">﷽</text></svg>');
+      opacity: 0.1;
+      pointer-events: none;
+    }
+
+    .sidebar-header {
+      padding: var(--gap);
+      background: rgba(0, 0, 0, 0.2);
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .sidebar h1 {
+      color: var(--white);
+      font-size: 1.8rem;
+      margin: 0;
+      font-weight: 700;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .sidebar h1::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: var(--gold);
+      border-radius: 2px;
+    }
+
+    .sidebar h2 {
+      color: var(--gold-light);
+      font-size: 1.2rem;
+      font-weight: 400;
+      margin-top: 5px;
+    }
+
+    .search-box {
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.15);
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 10px 15px;
+      border-radius: 30px;
+      border: none;
+      background: rgba(255, 255, 255, 0.15);
+      color: var(--white);
+      font-family: 'Tajawal', sans-serif;
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    .search-box input:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 0 0 2px var(--gold);
+    }
+
+    .search-box input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .student-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      overflow-y: auto;
+      max-height: calc(100vh - 200px);
+    }
+
+    .student-list li {
+      padding: 1.2rem 1.5rem;
+      cursor: pointer;
+      transition: var(--transition);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: var(--white);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+
+    .student-list li:hover {
+      background: rgba(255, 255, 255, 0.1);
+      padding-right: 2rem;
+    }
+
+    .student-list li i {
+      margin-left: 10px;
+      color: var(--gold);
+      font-size: 1.2rem;
+    }
+
+    .student-list li.active {
+      background: linear-gradient(to right, rgba(26, 95, 90, 0.8), var(--primary-dark));
+      color: var(--gold-light);
+      font-weight: 600;
+      box-shadow: inset 5px 0 0 var(--gold);
+      padding-right: 2rem;
+    }
+
+    .student-list li.active::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1));
+      pointer-events: none;
+    }
+
+    /* المحتوى الرئيسي */
+    .main {
+      flex: 1;
+      padding: var(--gap);
+      background: var(--white);
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--gap);
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .header h3 {
+      color: var(--primary-dark);
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .header-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .date-box {
+      background: var(--light);
+      padding: 8px 15px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .user-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-name {
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .user-role {
+      font-size: 0.8rem;
+      color: var(--gray);
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--gap);
+      margin-bottom: var(--gap);
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.5rem;
+      transition: var(--transition);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(to right, var(--primary), var(--accent));
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+
+    .card-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      background: rgba(26, 95, 90, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+
+    .form-section {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: var(--gap);
+      margin-bottom: var(--gap);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .form-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(to right, var(--accent), var(--accent-dark));
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--gap);
+      margin-bottom: var(--gap);
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--dark);
+      font-size: 1rem;
+    }
+
+    .form-group select,
+    .form-group input[type="number"] {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      background: var(--light);
+      font-family: 'Tajawal', sans-serif;
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    .form-group select:focus,
+    .form-group input[type="number"]:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--primary);
+    }
+
+    .result-container {
+      background: linear-gradient(to right, var(--primary), var(--primary-dark));
+      border-radius: var(--radius);
+      padding: 2rem;
+      text-align: center;
+      color: var(--white);
+      margin: var(--gap) 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .result-container::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 150px;
+      height: 150px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+    }
+
+    .result-container::after {
+      content: '';
+      position: absolute;
+      bottom: -30px;
+      left: -30px;
+      width: 100px;
+      height: 100px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+    }
+
+    .result-label {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      color: var(--gold-light);
+    }
+
+    .result-value {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1;
+      margin: 0.5rem 0;
+      color: var(--white);
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .result-desc {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .action-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+      margin-top: var(--gap);
+    }
+
+    .btn {
+      padding: 0.9rem 2rem;
+      border-radius: 8px;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(to right, var(--primary), var(--primary-dark));
+      color: var(--white);
+      box-shadow: 0 4px 15px rgba(26, 95, 90, 0.4);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(to right, var(--primary-light), var(--primary));
+      transform: translateY(-3px);
+      box-shadow: 0 7px 20px rgba(26, 95, 90, 0.6);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(to right, var(--accent), var(--accent-dark));
+      color: var(--white);
+      box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+    }
+
+    .btn-secondary:hover {
+      background: linear-gradient(to right, #3da8e0, var(--accent));
+      transform: translateY(-3px);
+      box-shadow: 0 7px 20px rgba(52, 152, 219, 0.6);
+    }
+
+    .btn-warning {
+      background: linear-gradient(to right, var(--gold), #b8860b);
+      color: var(--dark);
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+    }
+
+    .btn-warning:hover {
+      background: linear-gradient(to right, #e6c04d, var(--gold));
+      transform: translateY(-3px);
+      box-shadow: 0 7px 20px rgba(212, 175, 55, 0.6);
+    }
+
+    .stats-section {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: var(--gap);
+      margin-bottom: var(--gap);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--gap);
+      margin-top: 1rem;
+    }
+
+    .stat-card {
+      background: var(--light);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      border-left: 4px solid var(--primary);
+    }
+
+    .stat-card:nth-child(2) {
+      border-left-color: var(--accent);
+    }
+
+    .stat-card:nth-child(3) {
+      border-left-color: var(--gold);
+    }
+
+    .stat-card:nth-child(4) {
+      border-left-color: var(--success);
+    }
+
+    .stat-card h4 {
+      font-size: 1.1rem;
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-card .value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+
+    .stat-card .desc {
+      font-size: 0.9rem;
+      color: var(--gray);
+      margin-top: 0.5rem;
+    }
+
+    .ranking-section {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: var(--gap);
+    }
+
+    .table-container {
+      overflow-x: auto;
+      margin-top: 1.5rem;
+      border-radius: var(--radius);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      min-width: 800px;
+    }
+
+    th {
+      background: linear-gradient(to right, var(--primary), var(--primary-dark));
+      color: var(--white);
+      padding: 1.2rem;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    td {
+      padding: 1rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      background: var(--white);
+      transition: var(--transition);
+    }
+
+    tr:hover td {
+      background: rgba(26, 95, 90, 0.03);
+    }
+
+    .first-place {
+      background: linear-gradient(to right, rgba(212, 175, 55, 0.05), rgba(212, 175, 55, 0.03));
+    }
+
+    .first-place td:first-child {
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .second-place {
+      background: rgba(192, 192, 192, 0.03);
+    }
+
+    .second-place td:first-child {
+      color: #c0c0c0;
+      font-weight: 700;
+    }
+
+    .third-place {
+      background: rgba(205, 127, 50, 0.03);
+    }
+
+    .third-place td:first-child {
+      color: #cd7f32;
+      font-weight: 700;
+    }
+
+    .export-message {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--success);
+      color: var(--white);
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      opacity: 0;
+      transition: var(--transition);
+      font-weight: 600;
+    }
+
+    .export-message.show {
+      opacity: 1;
+      animation: fadeInOut 3s ease-in-out;
+    }
+
+    @keyframes fadeInOut {
+      0% { opacity: 0; transform: translateX(-50%) translateY(30px); }
+      20% { opacity: 1; transform: translateX(-50%) translateY(0); }
+      80% { opacity: 1; transform: translateX(-50%) translateY(0); }
+      100% { opacity: 0; transform: translateX(-50%) translateY(30px); }
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .badge-success {
+      background: rgba(39, 174, 96, 0.15);
+      color: var(--success);
+    }
+
+    .badge-warning {
+      background: rgba(243, 156, 18, 0.15);
+      color: var(--warning);
+    }
+
+    .badge-danger {
+      background: rgba(231, 76, 60, 0.15);
+      color: var(--danger);
+    }
+    
+    /* تحسينات جديدة */
+    .progress-container {
+      width: 100%;
+      height: 15px;
+      background-color: #e0e0e0;
+      border-radius: 10px;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(to right, var(--primary), var(--primary-light));
+      border-radius: 10px;
+      transition: width 0.5s ease;
+    }
+    
+    .penalties-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      background: var(--white);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    
+    .penalties-table th {
+      background: var(--primary-light);
+      color: var(--white);
+      padding: 0.8rem;
+      text-align: right;
+    }
+    
+    .penalties-table td {
+      padding: 0.8rem;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      text-align: right;
+    }
+    
+    .penalties-table tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .penalties-table tr:nth-child(even) {
+      background: rgba(45, 140, 133, 0.05);
+    }
+    
+    .penalties-table .total-row {
+      background: rgba(26, 95, 90, 0.1);
+      font-weight: bold;
+    }
+    
+    /* بطاقات جديدة */
+    .focus-card {
+      background: linear-gradient(to right, #3498db, #2980b9);
+      color: white;
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+    }
+    
+    .mushaf-card {
+      background: linear-gradient(to right, #d4af37, #b8860b);
+      color: white;
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+    }
+    
+    .focus-card .value, 
+    .mushaf-card .value {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin: 0.5rem 0;
+    }
+
+    /* تصميم متجاوب */
+    @media (max-width: 992px) {
+      .app {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        height: auto;
+      }
+      .student-list {
+        max-height: 300px;
+      }
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+      }
+      .header-info {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+      .result-value {
+        font-size: 2.5rem;
+      }
+      .action-buttons {
+        flex-direction: column;
+      }
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>نظام التقييم القرآني</h1>
+        <h2>رجال مؤمنون</h2>
+      </div>
+      
+      <div class="search-box">
+        <input type="text" placeholder="ابحث عن طالب...">
+      </div>
+      
+      <ul class="student-list" id="studentList"></ul>
+    </aside>
+    
+    <main class="main">
+      <div class="header">
+        <h3 id="currentName">لوحة تحكم المعلم</h3>
+        <div class="header-info">
+          <div class="date-box">
+            <i class="fas fa-calendar"></i>
+            <span id="currentDate">اليوم: الأربعاء 28 مايو 2025</span>
+          </div>
+          <div class="user-box">
+            <div class="avatar">م</div>
+            <div class="user-info">
+              <div class="user-name">المعلم عبد الله</div>
+              <div class="user-role">مشرف مجموعة رجال مؤمنون</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="dashboard">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">إجمالي الطلاب</div>
+            <div class="card-icon">
+              <i class="fas fa-users"></i>
+            </div>
+          </div>
+          <div class="card-content">
+            <div class="value" id="totalStudents">7</div>
+            <div class="desc">طلاب مسجلين في النظام</div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">أعلى تقييم</div>
+            <div class="card-icon">
+              <i class="fas fa-trophy"></i>
+            </div>
+          </div>
+          <div class="card-content">
+            <div class="value" id="highestScore">94.7%</div>
+            <div class="desc" id="highestStudent">المتيم بالله أحمد</div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">متوسط التقييم</div>
+            <div class="card-icon">
+              <i class="fas fa-chart-line"></i>
+            </div>
+          </div>
+          <div class="card-content">
+            <div class="value" id="averageScore">86.3%</div>
+            <div class="desc">متوسط أداء المجموعة</div>
+          </div>
+        </div>
+      </div>
+      
+      <section class="form-section">
+        <h3>تقييم الطالب</h3>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label>الأجزاء الكاملة:</label>
+            <select id="numFull"></select>
+            <div id="fullContainer"></div>
+          </div>
+          
+          <div class="form-group">
+            <label>الأجزاء الجزئية:</label>
+            <select id="numSub"></select>
+            <div id="subContainer"></div>
+          </div>
+          
+          <div class="form-group">
+            <label>التسميع الجديد:</label>
+            <select id="numNew"></select>
+            <div id="newContainer"></div>
+          </div>
+          
+          <div class="form-group">
+            <label>جزء الواجب:</label>
+            <select id="numHW"></select>
+            <div id="hwContainer"></div>
+          </div>
+        </div>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label>نقاط الأدب:</label>
+            <select id="adab"></select>
+          </div>
+          
+          <div class="form-group">
+            <label>ساعة الحضور:</label>
+            <select id="time"></select>
+          </div>
+          
+          <div class="form-group">
+            <label>التركيز:</label>
+            <select id="focus"></select>
+          </div>
+          
+          <div class="form-group">
+            <label style="margin-bottom: 1.2rem;">أحضر المصحف:</label>
+            <div class="checkbox-group">
+              <input type="checkbox" id="mushaf">
+              <label for="mushaf">نعم، أحضر المصحف</label>
+            </div>
+          </div>
+        </div>
+        
+        <div class="result-container">
+          <div class="result-label">التقييم النهائي</div>
+          <div class="result-value" id="result">- %</div>
+          <div class="result-desc">هذا التقييم يعكس أداء الطالب بناءً على المعايير المحددة</div>
+          <div class="progress-container">
+            <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+          </div>
+        </div>
+        
+        <div class="action-buttons">
+          <button class="btn btn-primary" id="calculate">
+            <i class="fas fa-calculator"></i> احسب التقييم
+          </button>
+          <button class="btn btn-secondary" id="showRanking">
+            <i class="fas fa-trophy"></i> عرض الترتيب
+          </button>
+          <button class="btn btn-warning" id="exportExcel">
+            <i class="fas fa-file-excel"></i> تصدير إكسل
+          </button>
+          <button class="btn btn-secondary" id="exportPDF">
+            <i class="fas fa-file-pdf"></i> تصدير تقرير PDF
+          </button>
+        </div>
+      </section>
+      
+      <section class="stats-section" id="statsSection">
+        <h3>تفاصيل التقييم</h3>
+        <div class="stats-grid" id="statsList"></div>
+        
+        <!-- بطاقات جديدة بدلاً من تفاصيل الأداء -->
+        <div class="stats-grid">
+          <div class="focus-card">
+            <h4>نقاط الحفظ للتركيز</h4>
+            <div class="value" id="focusPoints">0</div>
+            <div class="desc">من أصل 3 نقاط</div>
+          </div>
+          
+          <div class="mushaf-card">
+            <h4>نقاط إحضار المصحف</h4>
+            <div class="value" id="mushafPoints">0</div>
+            <div class="desc">نقاط إضافية عند الإحضار</div>
+          </div>
+        </div>
+        
+        <div class="detail-section" id="penaltiesSection">
+          <h4>تفاصيل الخصومات</h4>
+          <table class="penalties-table">
+            <thead>
+              <tr>
+                <th>نوع التسميع</th>
+                <th>الجزء</th>
+                <th>الأخطاء</th>
+                <th>الترددات</th>
+                <th>الخصم</th>
+              </tr>
+            </thead>
+            <tbody id="penaltiesBody"></tbody>
+          </table>
+        </div>
+      </section>
+      
+      <section class="ranking-section" id="rankingSection">
+        <h3>ترتيب الطلاب</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>المركز</th>
+                <th>الاسم</th>
+                <th>الأجزاء الكاملة</th>
+                <th>نقاط الأدب</th>
+                <th>نقاط الحضور</th>
+                <th>النسبة (%)</th>
+                <th>الحالة</th>
+              </tr>
+            </thead>
+            <tbody id="rankingBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+  
+  <div class="export-message" id="exportMessage">تم تصدير البيانات بنجاح</div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // بيانات الصعوبة
+      const diff = {
+        1: 2, 2: 0.8, 3: 1.5, 4: 1.5, 5: 1.5, 6: 1.5, 7: 0.8,
+        8: 0.8, 9: 1.5, 10: 1.5, 11: 0.8, 12: 1.5, 13: 1.5,
+        14: 0.6, 15: 2, 16: 2, 17: 0.8, 18: 0.8, 19: 1.5,
+        20: 1.5, 21: 1.5, 22: 1.5, 23: 0.8, 24: 1.5, 25: 0.6,
+        26: 0.8, 27: 0.8, 28: 0.6, 29: 1.5, 30: 2.2
+      };
+
+      // قائمة الطلاب
+      const students = [
+        "فضل بواعنة",
+        "أوس مصطفى",
+        "المتيم بالله أحمد",
+        "يوسف عبد القادر",
+        "المعتصم بالله أحمد",
+        "علاء الرياحنة",
+        "بهاء الدين عمار"
+      ];
+
+      // إعداد التاريخ
+      const now = new Date();
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      document.getElementById('currentDate').textContent = now.toLocaleDateString('ar-AR', options);
+      
+      const MAX_PARTS = 30;
+      const studentData = {};
+      let current = null;
+
+      // عناصر واجهة المستخدم
+      const timeSel = document.getElementById('time');
+      const ul = document.getElementById('studentList');
+      const exportMessage = document.getElementById('exportMessage');
+
+      // وظائف المساعدة
+      function fillSelect(el, from, to) {
+        for (let i = from; i <= to; i++) {
+          let o = document.createElement('option');
+          o.value = i;
+          o.textContent = i;
+          el.appendChild(o);
+        }
+      }
+
+      // ملء القوائم المنسدلة
+      ['numFull', 'numSub', 'numNew', 'numHW'].forEach(id => 
+        fillSelect(document.getElementById(id), 0, MAX_PARTS));
+
+      fillSelect(document.getElementById('adab'), 0, 20);
+      fillSelect(document.getElementById('focus'), 1, 3);
+
+      // إعداد خيارات الوقت
+      for (let h = 5; h <= 8; h++) {
+        [0, 15, 30, 45].forEach(m => {
+          if (h === 8 && m > 30) return;
+          let v = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+          let o = document.createElement('option');
+          o.value = v;
+          o.textContent = v;
+          timeSel.appendChild(o);
+        });
+      }
+
+      // إنشاء صف في الحاوية
+      function createRow(cnt, type) {
+        let row = document.createElement('div');
+        row.className = 'form-grid';
+        if (['sub', 'new', 'hw'].includes(type)) {
+          let ip = document.createElement('input');
+          ip.type = 'number';
+          ip.placeholder = 'عدد الصفحات';
+          ip.min = 0;
+          ip.className = 'form-control';
+          row.appendChild(ip);
+        }
+        let sel = document.createElement('select');
+        for (let p = 1; p <= MAX_PARTS; p++) {
+          let o = document.createElement('option');
+          o.value = p;
+          o.textContent = p;
+          sel.appendChild(o);
+        }
+        row.appendChild(sel);
+        ['أخطاء', 'تكرار'].forEach(ph => {
+          let inp = document.createElement('input');
+          inp.type = 'number';
+          inp.placeholder = ph;
+          inp.min = 0;
+          inp.className = 'form-control';
+          row.appendChild(inp);
+        });
+        cnt.appendChild(row);
+      }
+
+      // معالجة تغيير عدد الأجزاء
+      ['numFull', 'numSub', 'numNew', 'numHW'].forEach((id, i) => {
+        document.getElementById(id).addEventListener('change', e => {
+          let ids = ['fullContainer', 'subContainer', 'newContainer', 'hwContainer'];
+          let cnt = document.getElementById(ids[i]);
+          cnt.innerHTML = '';
+          for (let k = 0; k < +e.target.value; k++) {
+            createRow(cnt, ids[i].replace('Container', ''));
+          }
+        });
+      });
+
+      // إنشاء قائمة الطلاب
+      students.forEach(name => {
+        studentData[name] = {};
+        let li = document.createElement('li');
+        li.innerHTML = `<i class="fas fa-user-graduate"></i> ${name}`;
+        li.addEventListener('click', () => selectStudent(name, li));
+        ul.appendChild(li);
+      });
+
+      // تحديد طالب
+      function selectStudent(name, li) {
+        current = name;
+        document.querySelectorAll('.student-list li').forEach(x => 
+          x.classList.remove('active'));
+        li.classList.add('active');
+        document.getElementById('currentName').textContent = `تقييم الطالب: ${name}`;
+        let d = studentData[name];
+        ['numFull', 'numSub', 'numNew', 'numHW', 'adab', 'time', 'focus'].forEach(id => {
+          if (d[id] != null) document.getElementById(id).value = d[id];
+        });
+        document.getElementById('mushaf').checked = d.mushaf || false;
+        ['numFull', 'numSub', 'numNew', 'numHW'].forEach(id => 
+          document.getElementById(id).dispatchEvent(new Event('change')));
+        document.getElementById('statsSection').style.display = 'block';
+        document.getElementById('rankingSection').style.display = 'block';
+        document.getElementById('penaltiesSection').style.display = 'block';
+        
+        // تحديث تفاصيل الطالب إذا كان لديه بيانات
+        if (d.total != null) {
+          document.getElementById('result').textContent = d.total + '%';
+          document.getElementById('progressBar').style.width = d.total + '%';
+          renderStats(d);
+          renderPenalties(d);
+          // تحديث البطاقات الجديدة
+          document.getElementById('focusPoints').textContent = d.focus;
+          document.getElementById('mushafPoints').textContent = d.mushaf ? 2 : 0;
+        }
+      }
+
+      // تحديث لوحة التحكم
+      function updateDashboard() {
+        const studentsWithScores = Object.entries(studentData)
+          .filter(([, data]) => data.total != null)
+          .map(([name, data]) => ({ name, total: data.total }));
+        
+        if (studentsWithScores.length > 0) {
+          // حساب أعلى تقييم
+          const highest = studentsWithScores.reduce((max, student) => 
+            student.total > max.total ? student : max, studentsWithScores[0]);
+          
+          document.getElementById('highestScore').textContent = highest.total.toFixed(1) + '%';
+          document.getElementById('highestStudent').textContent = highest.name;
+          
+          // حساب متوسط التقييم
+          const totalScore = studentsWithScores.reduce((sum, student) => sum + student.total, 0);
+          const average = totalScore / studentsWithScores.length;
+          document.getElementById('averageScore').textContent = average.toFixed(1) + '%';
+        }
+      }
+
+      // عرض الإحصائيات
+      function renderStats(d) {
+        const stats = document.getElementById('statsList');
+        stats.innerHTML = '';
+        
+        const statCards = [
+          { 
+            title: 'الأجزاء المعادلة', 
+            value: d.totalEquivalentParts.toFixed(2),
+            desc: 'إجمالي الأجزاء المحفوظة معادلة'
+          },
+          { 
+            title: 'نقاط الأدب', 
+            value: d.adab,
+            desc: 'من أصل 20 نقطة'
+          },
+          { 
+            title: 'نقاط الحضور', 
+            value: d.delay.toFixed(2),
+            desc: `من أصل 10 نقاط (تأخير ${d.late} دقيقة)`
+          },
+          { 
+            title: 'نقاط الحفظ', 
+            value: d.hifdh.toFixed(2),
+            desc: 'من أصل 60 نقطة'
+          }
+        ];
+        
+        statCards.forEach(card => {
+          const cardEl = document.createElement('div');
+          cardEl.className = 'stat-card';
+          cardEl.innerHTML = `
+            <h4>${card.title}</h4>
+            <div class="value">${card.value}</div>
+            <div class="desc">${card.desc}</div>
+          `;
+          stats.appendChild(cardEl);
+        });
+      }
+      
+      // عرض تفاصيل الخصومات
+      function renderPenalties(d) {
+        const penaltiesBody = document.getElementById('penaltiesBody');
+        penaltiesBody.innerHTML = '';
+        
+        let totalPenalty = 0;
+        
+        if (d.penDetails && d.penDetails.length > 0) {
+          d.penDetails.forEach((item, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${item.type}</td>
+              <td>${item.part}</td>
+              <td>${item.errors}</td>
+              <td>${item.reps}</td>
+              <td>${item.totalPenalty.toFixed(2)}</td>
+            `;
+            penaltiesBody.appendChild(row);
+            totalPenalty += item.totalPenalty;
+          });
+          
+          // إضافة الصف الإجمالي
+          const totalRow = document.createElement('tr');
+          totalRow.className = 'total-row';
+          totalRow.innerHTML = `
+            <td colspan="4">إجمالي الخصومات</td>
+            <td>${totalPenalty.toFixed(2)}</td>
+          `;
+          penaltiesBody.appendChild(totalRow);
+        } else {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td colspan="5" style="text-align: center; padding: 1.5rem;">لا توجد خصومات مسجلة</td>
+          `;
+          penaltiesBody.appendChild(row);
+        }
+      }
+
+      // حساب التقييم
+      document.getElementById('calculate').addEventListener('click', () => {
+        if (!current) return alert('الرجاء اختيار طالب أولاً');
+        
+        let d = {
+          mushaf: document.getElementById('mushaf').checked,
+          adab: +document.getElementById('adab').value,
+          focus: +document.getElementById('focus').value,
+          time: document.getElementById('time').value,
+          numFull: +document.getElementById('numFull').value,
+          numSub: +document.getElementById('numSub').value,
+          numNew: +document.getElementById('numNew').value,
+          numHW: +document.getElementById('numHW').value
+        };
+
+        const containers = {
+          fullContainer: {type: 'كامل', pagesPerPart: 1},
+          subContainer: {type: 'جزئي', pagesPerPart: 20},
+          newContainer: {type: 'جديد', pagesPerPart: 5},
+          hwContainer: {type: 'واجب', pagesPerPart: 10}
+        };
+
+        d.totalEquivalentParts = 0;
+        d.penDetails = [];
+        const allItems = [];
+
+        // جمع العناصر وحساب الأجزاء المعادلة
+        Object.entries(containers).forEach(([cid, info]) => {
+          d[cid] = [];
+          document.querySelectorAll(`#${cid} .form-grid`).forEach(r => {
+            const inputs = r.querySelectorAll('input, select');
+            let idx = 0;
+            const item = {
+              type: info.type,
+              pages: inputs.length > 3 ? +inputs[idx++].value : 0,
+              part: +inputs[idx++].value,
+              errors: +inputs[idx++].value,
+              reps: +inputs[idx++].value
+            };
+
+            const equivalentParts = item.pages ? item.pages / info.pagesPerPart : 1;
+            allItems.push({...item, equivalentParts});
+            d.totalEquivalentParts += equivalentParts;
+            d[cid].push(item);
+          });
+        });
+
+        // حساب الخصومات
+        allItems.forEach(item => {
+          const coeff = diff[item.part] || 0;
+          const repsPenalty = (0.5 * item.reps * coeff) / d.totalEquivalentParts;
+          const errorsPenalty = (2 * item.errors * coeff) / d.totalEquivalentParts;
+          const totalPenalty = repsPenalty + errorsPenalty;
+          
+          d.penDetails.push({
+            ...item,
+            coeff,
+            repsPenalty,
+            errorsPenalty,
+            totalPenalty
+          });
+        });
+
+        // حساب نقاط الحضور
+        const [sh, sm] = [5, 30];
+        const [h, m] = d.time.split(':').map(Number);
+        d.late = Math.max(0, h * 60 + m - (sh * 60 + sm));
+        d.delay = d.late >= 180 ? 0 : (1 - d.late / 180) * 10;
+
+        // حساب النقاط النهائية
+        d.hifdh = Math.max(0, 60 - d.penDetails.reduce((s, p) => s + p.totalPenalty, 0));
+        d.total = +(((d.adab + d.delay + d.hifdh + d.focus + (d.mushaf ? 2 : 0)) / 95 * 100).toFixed(2));
+        studentData[current] = d;
+        document.getElementById('result').textContent = d.total + '%';
+        document.getElementById('progressBar').style.width = d.total + '%';
+        renderStats(d);
+        renderPenalties(d);
+        
+        // تحديث البطاقات الجديدة
+        document.getElementById('focusPoints').textContent = d.focus;
+        document.getElementById('mushafPoints').textContent = d.mushaf ? 2 : 0;
+        
+        // تحديث لوحة التحكم
+        updateDashboard();
+      });
+
+      // عرض الترتيب
+      document.getElementById('showRanking').addEventListener('click', () => {
+        const arr = Object.entries(studentData)
+          .filter(([, v]) => v.total != null)
+          .map(([n, v]) => ({ name: n, total: v.total, adab: v.adab, numFull: v.numFull || 0, delay: v.delay }));
+        
+        arr.sort((a, b) => b.total - a.total);
+        const tbody = document.getElementById('rankingBody');
+        tbody.innerHTML = '';
+        
+        arr.forEach((s, i) => {
+          const tr = document.createElement('tr');
+          if (i === 0) tr.classList.add('first-place');
+          else if (i === 1) tr.classList.add('second-place');
+          else if (i === 2) tr.classList.add('third-place');
+          
+          // وضعية الطالب
+          let status = '';
+          let badge = '';
+          if (s.total >= 90) {
+            status = 'ممتاز';
+            badge = '<span class="badge badge-success">ممتاز</span>';
+          } else if (s.total >= 75) {
+            status = 'جيد جدًا';
+            badge = '<span class="badge badge-success">جيد جدًا</span>';
+          } else if (s.total >= 60) {
+            status = 'جيد';
+            badge = '<span class="badge badge-warning">جيد</span>';
+          } else {
+            status = 'يحتاج تحسين';
+            badge = '<span class="badge badge-danger">يحتاج تحسين</span>';
+          }
+          
+          tr.innerHTML = `
+            <td>${i + 1}</td>
+            <td>${s.name}</td>
+            <td>${s.numFull}</td>
+            <td>${s.adab}</td>
+            <td>${s.delay.toFixed(2)}</td>
+            <td>${s.total.toFixed(2)}%</td>
+            <td>${badge}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      });
+
+      // تصدير إلى إكسل
+      document.getElementById('exportExcel').addEventListener('click', () => {
+        const students = Object.entries(studentData)
+          .filter(([, data]) => data.total)
+          .map(([name, data]) => ({
+            الاسم: name,
+            'الأجزاء الكاملة': data.numFull || 0,
+            'نقاط الأدب': data.adab,
+            'نقاط الحضور': data.delay.toFixed(2),
+            'إجمالي الأجزاء المعادلة': data.totalEquivalentParts.toFixed(2),
+            'نقاط الحفظ بعد الخصم': data.hifdh.toFixed(2),
+            'التركيز': data.focus,
+            'أحضر المصحف': data.mushaf ? 'نعم' : 'لا',
+            'إجمالي النسبة': data.total.toFixed(2)
+          }));
+
+        const ws = XLSX.utils.json_to_sheet(students);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "الطلاب");
+        XLSX.writeFile(wb, "إحصائيات_الطلاب_رجال_مؤمنون.xlsx");
+        
+        showExportMessage();
+      });
+
+      // تصدير إلى PDF
+      document.getElementById('exportPDF').addEventListener('click', async () => {
+        if (!current) return alert('الرجاء اختيار طالب أولاً');
+        
+        const student = studentData[current];
+        if (!student.total) return alert('لا توجد بيانات كافية لإنشاء التقرير');
+        
+        // إنشاء عنصر مؤقت للتقرير
+        const reportContainer = document.createElement('div');
+        reportContainer.style.position = 'absolute';
+        reportContainer.style.left = '-9999px';
+        reportContainer.style.width = '260mm';
+        reportContainer.style.padding = '0.1cm 0.1cm';
+        reportContainer.style.fontFamily = "'Tajawal', sans-serif";
+        reportContainer.style.fontSize = '11pt';
+        reportContainer.style.direction = 'rtl';
+        reportContainer.style.backgroundColor = 'white';
+        
+        // محتوى التقرير مع تقليل الهامش العلوي
+        reportContainer.innerHTML = `
+          <div style="text-align: center; margin-bottom: 10px; padding-top: 5mm;">
+            <h1 style="color: #1a5f5a; font-size: 20pt; margin-bottom: 5px;">تقرير أداء الطالب</h1>
+            <h2 style="color: #3498db; font-size: 16pt;">شعبة رجال مؤمنون</h2>
+          </div>
+          
+          <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 11pt;">
+            <tr>
+              <th style="padding: 8px; border: 1px solid #ddd; background-color: #1a5f5a; color: white;">اسم الطالب</th>
+              <th style="padding: 8px; border: 1px solid #ddd; background-color: #1a5f5a; color: white;">التاريخ</th>
+              <th style="padding: 8px; border: 1px solid #ddd; background-color: #1a5f5a; color: white;">الشعبة</th>
+              <th style="padding: 8px; border: 1px solid #ddd; background-color: #1a5f5a; color: white;">المشرف</th>
+            </tr>
+            <tr>
+              <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${current}</td>
+              <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${new Date().toLocaleDateString('ar-AR')}</td>
+              <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">رجال مؤمنون</td>
+              <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">المشرف عبد الله</td>
+            </tr>
+          </table>
+          
+          <div style="margin-bottom: 15px;">
+            <div style="background: #3498db; color: white; padding: 8px; border-radius: 3px; margin-bottom: 10px; font-size: 14pt;">تفاصيل التقييم</div>
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 11pt;">
+              <tr>
+                <th style="padding: 8px; border: 1px solid #ddd; background-color: #1a5f5a; color: white;">المعيار</th>
+                <th style="padding: 8px; border: 1px solid #ddd; background-color: #1a5f5a; color: white;">القيمة</th>
+                <th style="padding: 8px; border: 1px solid #ddd; background-color: #1a5f5a; color: white;">المعيار</th>
+                <th style="padding: 8px; border: 1px solid #ddd; background-color: #1a5f5a; color: white;">القيمة</th>
+              </tr>
+              <tr>
+                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">الأجزاء الكاملة</td>
+                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${student.numFull || 0}</td>
+                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">نقاط الأدب</td>
+                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${student.adab}/20</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">الأجزاء الجزئية</td>
+                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${student.numSub || 0}</td>
+                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">نقاط الحضور</td>
+                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${student.delay.toFixed(2)}/10</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">التسميع الجديد</td>
+                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${student.numNew || 0}</td>
+                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">التركيز</td>
+                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${student.focus}/3</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">جزء الواجب</td>
+                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${student.numHW || 0}</td>
+                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">إحضار المصحف</td>
+                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${student.mushaf ? 'نعم' : 'لا'}</td>
+              </tr>
+            </table>
+          </div>
+          
+          <div style="margin-bottom: 15px;">
+            <div style="background: #d4af37; color: white; padding: 8px; border-radius: 3px; margin-bottom: 10px; font-size: 14pt;">تفاصيل الخصومات</div>
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 11pt;">
+              <tr>
+                <th style="padding: 8px; border: 1px solid #ddd; background-color: #d4af37; color: white;">نوع التسميع</th>
+                <th style="padding: 8px; border: 1px solid #ddd; background-color: #d4af37; color: white;">الجزء</th>
+                <th style="padding: 8px; border: 1px solid #ddd; background-color: #d4af37; color: white;">الأخطاء</th>
+                <th style="padding: 8px; border: 1px solid #ddd; background-color: #d4af37; color: white;">الترددات</th>
+                <th style="padding: 8px; border: 1px solid #ddd; background-color: #d4af37; color: white;">الخصم</th>
+              </tr>
+              ${student.penDetails && student.penDetails.length > 0 ? 
+                student.penDetails.map(item => `
+                  <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${item.type}</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${item.part}</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${item.errors}</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${item.reps}</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${item.totalPenalty.toFixed(2)}</td>
+                  </tr>
+                `).join('') : `
+                  <tr>
+                    <td colspan="5" style="text-align: center; padding: 1.5rem;">لا توجد خصومات مسجلة</td>
+                  </tr>
+                `}
+              <tr style="background: rgba(26, 95, 90, 0.1); font-weight: bold;">
+                <td colspan="4" style="font-weight: bold; text-align: center; padding: 8px; border: 1px solid #ddd;">إجمالي الخصومات</td>
+                <td style="font-weight: bold; padding: 8px; border: 1px solid #ddd; text-align: center;">${student.penDetails ? student.penDetails.reduce((sum, item) => sum + item.totalPenalty, 0).toFixed(2) : '0.00'}</td>
+              </tr>
+            </table>
+          </div>
+          
+          <div style="margin-bottom: 15px;">
+            <div style="background: #27ae60; color: white; padding: 8px; border-radius: 3px; margin-bottom: 10px; font-size: 14pt;">ترتيب الطلاب</div>
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 11pt;">
+              <tr>
+                <th style="padding: 8px; border: 1px solid #ddd; background-color: #27ae60; color: white;">المركز</th>
+                <th style="padding: 8px; border: 1px solid #ddd; background-color: #27ae60; color: white;">الاسم</th>
+                <th style="padding: 8px; border: 1px solid #ddd; background-color: #27ae60; color: white;">النسبة (%)</th>
+                <th style="padding: 8px; border: 1px solid #ddd; background-color: #27ae60; color: white;">الحالة</th>
+              </tr>
+              ${Object.entries(studentData)
+                .filter(([, data]) => data.total != null)
+                .sort((a, b) => b[1].total - a[1].total)
+                .map(([name, data], index) => `
+                  <tr ${name === current ? 'style="background-color: #f1e5ac; font-weight: bold;"' : ''}>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${index + 1}</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${name}</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${data.total.toFixed(2)}%</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${
+                      data.total >= 90 ? 'ممتاز' : 
+                      data.total >= 75 ? 'جيد جدًا' : 
+                      data.total >= 60 ? 'جيد' : 'يحتاج تحسين'
+                    }</td>
+                  </tr>
+                `).join('')}
+            </table>
+          </div>
+          
+          <div style="text-align: center; margin-top: 20px; padding: 15px; background: #e9f7f6; border-radius: 5px; font-weight: bold; font-size: 14pt;">
+            التقييم النهائي: ${student.total.toFixed(2)}% - 
+            ${
+              student.total >= 90 ? 'ممتاز' : 
+              student.total >= 75 ? 'جيد جدًا' : 
+              student.total >= 60 ? 'جيد' : 'يحتاج تحسين'
+            }
+          </div>
+        `;
+        
+        document.body.appendChild(reportContainer);
+        
+        try {
+          // إنشاء PDF باستخدام html2canvas و jsPDF
+          const canvas = await html2canvas(reportContainer, {
+            scale: 2,
+            useCORS: true,
+            logging: false
+          });
+          
+          const imgData = canvas.toDataURL('image/jpeg', 0.95);
+          const pdf = new jspdf.jsPDF({
+            orientation: 'portrait',
+            unit: 'mm',
+            format: 'a4'
+          });
+          
+          const imgWidth = 210;
+          const pageHeight = 297;
+          const imgHeight = canvas.height * imgWidth / canvas.width;
+          let heightLeft = imgHeight;
+          let position = 0;
+          
+          pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+          
+          while (heightLeft >= 0) {
+            position = heightLeft - imgHeight;
+            pdf.addPage();
+            pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+          }
+          
+          pdf.save(`تقرير_${current}_رجال_مؤمنون.pdf`);
+          showExportMessage();
+        } catch (error) {
+          console.error('خطأ في إنشاء PDF:', error);
+          alert('حدث خطأ أثناء إنشاء التقرير. الرجاء المحاولة مرة أخرى.');
+        } finally {
+          document.body.removeChild(reportContainer);
+        }
+      });
+
+      // وظيفة لعرض رسالة التصدير
+      function showExportMessage() {
+        exportMessage.classList.add('show');
+        setTimeout(() => {
+          exportMessage.classList.remove('show');
+        }, 3000);
+      }
+
+      // اختيار أول طالب افتراضي
+      if (students.length > 0) {
+        const firstStudent = document.querySelector('.student-list li');
+        if (firstStudent) {
+          firstStudent.click();
+        }
+      }
+      
+      // تحديث لوحة التحكم بشكل أولي
+      updateDashboard();
+    });
+  </script>
+</body>
+</html>
