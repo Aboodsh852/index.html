@@ -7,6 +7,12 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  
+  <!-- إضافة مكتبات Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore-compat.js"></script>
+  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
   <style>
@@ -511,6 +517,18 @@
       transform: translateY(-3px);
       box-shadow: 0 7px 20px rgba(212, 175, 55, 0.6);
     }
+    
+    .btn-danger {
+      background: linear-gradient(to right, var(--danger), #c0392b);
+      color: var(--white);
+      box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+    }
+    
+    .btn-danger:hover {
+      background: linear-gradient(to right, #e74c3c, #e67e22);
+      transform: translateY(-3px);
+      box-shadow: 0 7px 20px rgba(231, 76, 60, 0.6);
+    }
 
     .stats-section {
       background: var(--white);
@@ -763,6 +781,115 @@
       font-weight: 700;
       margin: 0.5rem 0;
     }
+    
+    /* تصميم جديد لمؤشر البيانات المحفوظة */
+    .data-indicator {
+      position: absolute;
+      top: 12px;
+      left: 15px;
+      width: 8px;
+      height: 8px;
+      background-color: var(--gold);
+      border-radius: 50%;
+    }
+    
+    .data-indicator.hidden {
+      display: none;
+    }
+    
+    /* زر مسح البيانات */
+    .clear-data-btn {
+      position: absolute;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      padding: 10px;
+      background: rgba(231, 76, 60, 0.15);
+      color: var(--danger);
+      border: 1px solid rgba(231, 76, 60, 0.3);
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 600;
+    }
+    
+    .clear-data-btn:hover {
+      background: rgba(231, 76, 60, 0.25);
+      transform: translateX(-50%) translateY(-2px);
+    }
+    
+    /* شاشة تسجيل الدخول */
+    .login-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    
+    .login-box {
+      background: white;
+      padding: 2rem;
+      border-radius: var(--radius);
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+    
+    .login-box h2 {
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+    }
+    
+    .login-input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    
+    .login-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      width: 100%;
+      margin-top: 1rem;
+    }
+    
+    .login-btn:hover {
+      background: var(--primary-dark);
+    }
+    
+    .login-message {
+      margin-top: 1rem;
+      color: var(--danger);
+    }
+    
+    .firebase-status {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 12px;
+      z-index: 1000;
+    }
 
     /* تصميم متجاوب */
     @media (max-width: 992px) {
@@ -785,6 +912,14 @@
         width: 100%;
         justify-content: space-between;
       }
+      .clear-data-btn {
+        position: relative;
+        bottom: auto;
+        left: auto;
+        transform: none;
+        width: 100%;
+        margin-top: 15px;
+      }
     }
 
     @media (max-width: 768px) {
@@ -804,7 +939,18 @@
   </style>
 </head>
 <body>
-  <div class="app">
+  <!-- شاشة تسجيل الدخول -->
+  <div class="login-container" id="loginContainer">
+    <div class="login-box">
+      <h2>تسجيل الدخول إلى النظام</h2>
+      <input type="email" class="login-input" id="emailInput" placeholder="البريد الإلكتروني">
+      <input type="password" class="login-input" id="passwordInput" placeholder="كلمة المرور">
+      <button class="login-btn" id="loginBtn">تسجيل الدخول</button>
+      <div class="login-message" id="loginMessage"></div>
+    </div>
+  </div>
+  
+  <div class="app" style="display:none" id="appContainer">
     <aside class="sidebar">
       <div class="sidebar-header">
         <h1>نظام التقييم القرآني</h1>
@@ -816,6 +962,10 @@
       </div>
       
       <ul class="student-list" id="studentList"></ul>
+      
+      <div class="clear-data-btn" id="clearDataBtn">
+        <i class="fas fa-trash-alt"></i> مسح جميع البيانات
+      </div>
     </aside>
     
     <main class="main">
@@ -827,11 +977,14 @@
             <span id="currentDate">اليوم: الأربعاء 28 مايو 2025</span>
           </div>
           <div class="user-box">
-            <div class="avatar">م</div>
+            <div class="avatar" id="userAvatar">م</div>
             <div class="user-info">
-              <div class="user-name">المعلم عبد الله</div>
-              <div class="user-role">مشرف مجموعة رجال مؤمنون</div>
+              <div class="user-name" id="userName">المعلم عبد الله</div>
+              <div class="user-role" id="userRole">مشرف مجموعة رجال مؤمنون</div>
             </div>
+            <button class="btn btn-danger" id="logoutBtn" style="padding: 8px 15px;">
+              <i class="fas fa-sign-out-alt"></i> خروج
+            </button>
           </div>
         </div>
       </div>
@@ -953,6 +1106,9 @@
           <button class="btn btn-secondary" id="exportPDF">
             <i class="fas fa-file-pdf"></i> تصدير تقرير PDF
           </button>
+          <button class="btn btn-danger" id="clearCurrentData">
+            <i class="fas fa-eraser"></i> مسح بيانات الطالب الحالي
+          </button>
         </div>
       </section>
       
@@ -982,6 +1138,7 @@
               <tr>
                 <th>نوع التسميع</th>
                 <th>الجزء</th>
+                <th>الصفحات</th>
                 <th>الأخطاء</th>
                 <th>الترددات</th>
                 <th>الخصم</th>
@@ -1015,6 +1172,7 @@
   </div>
   
   <div class="export-message" id="exportMessage">تم تصدير البيانات بنجاح</div>
+  <div class="firebase-status" id="firebaseStatus">جارٍ الاتصال بـ Firebase...</div>
   
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -1029,12 +1187,11 @@
 
       // قائمة الطلاب
       const students = [
-         "إلياس أحمد",
+        "إلياس أحمد",
         "أوس مصطفى",
         "علاء الرياحنة",
         "المتيم بالله أحمد",
         "يوسف عبد القادر",
-      
       ];
 
       // إعداد التاريخ
@@ -1043,14 +1200,95 @@
       document.getElementById('currentDate').textContent = now.toLocaleDateString('ar-AR', options);
       
       const MAX_PARTS = 30;
-      const studentData = {};
+      let studentData = {};
       let current = null;
+      let firebaseInitialized = false;
+      let db = null;
+      let auth = null;
+      let currentUser = null;
 
       // عناصر واجهة المستخدم
       const timeSel = document.getElementById('time');
       const ul = document.getElementById('studentList');
       const exportMessage = document.getElementById('exportMessage');
-
+      const loginContainer = document.getElementById('loginContainer');
+      const appContainer = document.getElementById('appContainer');
+      const firebaseStatus = document.getElementById('firebaseStatus');
+      
+      // تهيئة Firebase
+      function initializeFirebase() {
+        try {
+          // إعداد Firebase - استبدل هذه القيم بتكوين مشروعك
+          const firebaseConfig = {
+            apiKey: "AIzaSyDx8wE5jK4l6K0X8u9zVv7W8eXyZ2b3c4d",
+            authDomain: "quran-evaluation-system.firebaseapp.com",
+            projectId: "quran-evaluation-system",
+            storageBucket: "quran-evaluation-system.appspot.com",
+            messagingSenderId: "123456789012",
+            appId: "1:123456789012:web:abcdefghijklmnopqrstuv"
+          };
+          
+          // Initialize Firebase
+          firebase.initializeApp(firebaseConfig);
+          auth = firebase.auth();
+          db = firebase.firestore();
+          
+          firebaseStatus.textContent = "تم الاتصال بـ Firebase بنجاح";
+          firebaseStatus.style.background = "rgba(39, 174, 96, 0.7)";
+          
+          // متابعة حالة المصادقة
+          auth.onAuthStateChanged(user => {
+            if (user) {
+              // تم تسجيل الدخول
+              currentUser = user;
+              loginContainer.style.display = 'none';
+              appContainer.style.display = 'flex';
+              
+              // تحديث معلومات المستخدم
+              document.getElementById('userName').textContent = user.displayName || user.email;
+              document.getElementById('userAvatar').textContent = user.displayName ? user.displayName.charAt(0) : user.email.charAt(0);
+              
+              // تحميل بيانات الطلاب
+              loadStudentData();
+            } else {
+              // لم يتم تسجيل الدخول
+              loginContainer.style.display = 'flex';
+              appContainer.style.display = 'none';
+            }
+          });
+          
+          firebaseInitialized = true;
+        } catch (error) {
+          firebaseStatus.textContent = "خطأ في الاتصال بـ Firebase: " + error.message;
+          firebaseStatus.style.background = "rgba(231, 76, 60, 0.7)";
+          console.error("Firebase initialization error:", error);
+        }
+      }
+      
+      // تسجيل الدخول
+      document.getElementById('loginBtn').addEventListener('click', async () => {
+        const email = document.getElementById('emailInput').value;
+        const password = document.getElementById('passwordInput').value;
+        const loginMessage = document.getElementById('loginMessage');
+        
+        if (!email || !password) {
+          loginMessage.textContent = "الرجاء إدخال البريد الإلكتروني وكلمة المرور";
+          return;
+        }
+        
+        try {
+          await auth.signInWithEmailAndPassword(email, password);
+          loginMessage.textContent = "";
+        } catch (error) {
+          loginMessage.textContent = "خطأ في تسجيل الدخول: " + error.message;
+        }
+      });
+      
+      // تسجيل الخروج
+      document.getElementById('logoutBtn').addEventListener('click', () => {
+        auth.signOut();
+      });
+      
       // وظائف المساعدة
       function fillSelect(el, from, to) {
         for (let i = from; i <= to; i++) {
@@ -1123,14 +1361,23 @@
         });
       });
 
-      // إنشاء قائمة الطلاب
-      students.forEach(name => {
-        studentData[name] = {};
-        let li = document.createElement('li');
-        li.innerHTML = `<i class="fas fa-user-graduate"></i> ${name}`;
-        li.addEventListener('click', () => selectStudent(name, li));
-        ul.appendChild(li);
-      });
+      // إنشاء قائمة الطلاب مع مؤشر البيانات
+      function createStudentList() {
+        ul.innerHTML = '';
+        students.forEach(name => {
+          let li = document.createElement('li');
+          li.innerHTML = `<i class="fas fa-user-graduate"></i> ${name}`;
+          
+          // مؤشر البيانات المحفوظة
+          const indicator = document.createElement('div');
+          indicator.className = 'data-indicator';
+          indicator.classList.toggle('hidden', !studentData[name] || !studentData[name].total);
+          li.appendChild(indicator);
+          
+          li.addEventListener('click', () => selectStudent(name, li));
+          ul.appendChild(li);
+        });
+      }
 
       // تحديد طالب
       function selectStudent(name, li) {
@@ -1139,7 +1386,7 @@
           x.classList.remove('active'));
         li.classList.add('active');
         document.getElementById('currentName').textContent = `تقييم الطالب: ${name}`;
-        let d = studentData[name];
+        let d = studentData[name] || {};
         ['numFull', 'numSub', 'numNew', 'numHW', 'adab', 'time', 'focus'].forEach(id => {
           if (d[id] != null) document.getElementById(id).value = d[id];
         });
@@ -1223,7 +1470,7 @@
         });
       }
       
-      // عرض تفاصيل الخصومات
+      // عرض تفاصيل الخصومات مع إضافة عمود الصفحات
       function renderPenalties(d) {
         const penaltiesBody = document.getElementById('penaltiesBody');
         penaltiesBody.innerHTML = '';
@@ -1236,6 +1483,7 @@
             row.innerHTML = `
               <td>${item.type}</td>
               <td>${item.part}</td>
+              <td>${item.pages || 'كامل'}</td>
               <td>${item.errors}</td>
               <td>${item.reps}</td>
               <td>${item.totalPenalty.toFixed(2)}</td>
@@ -1248,22 +1496,23 @@
           const totalRow = document.createElement('tr');
           totalRow.className = 'total-row';
           totalRow.innerHTML = `
-            <td colspan="4">إجمالي الخصومات</td>
+            <td colspan="5">إجمالي الخصومات</td>
             <td>${totalPenalty.toFixed(2)}</td>
           `;
           penaltiesBody.appendChild(totalRow);
         } else {
           const row = document.createElement('tr');
           row.innerHTML = `
-            <td colspan="5" style="text-align: center; padding: 1.5rem;">لا توجد خصومات مسجلة</td>
+            <td colspan="6" style="text-align: center; padding: 1.5rem;">لا توجد خصومات مسجلة</td>
           `;
           penaltiesBody.appendChild(row);
         }
       }
 
       // حساب التقييم
-      document.getElementById('calculate').addEventListener('click', () => {
+      document.getElementById('calculate').addEventListener('click', async () => {
         if (!current) return alert('الرجاء اختيار طالب أولاً');
+        if (!currentUser) return alert('الرجاء تسجيل الدخول أولاً');
         
         let d = {
           mushaf: document.getElementById('mushaf').checked,
@@ -1334,6 +1583,19 @@
         d.hifdh = Math.max(0, 65 - d.penDetails.reduce((s, p) => s + p.totalPenalty, 0));
         d.total = +(((d.adab + d.delay + d.hifdh + d.focus + (d.mushaf ? 2 : 0))).toFixed(2));
         studentData[current] = d;
+        
+        // حفظ البيانات في Firebase
+        await saveStudentData(current, d);
+        
+        // تحديث مؤشر البيانات المحفوظة
+        createStudentList();
+        document.querySelectorAll('.student-list li').forEach(li => {
+          if (li.textContent.includes(current)) {
+            li.querySelector('.data-indicator').classList.remove('hidden');
+            li.classList.add('active');
+          }
+        });
+        
         document.getElementById('result').textContent = d.total + '%';
         document.getElementById('progressBar').style.width = d.total + '%';
         renderStats(d);
@@ -1417,7 +1679,7 @@
         showExportMessage();
       });
 
-      // تصدير إلى PDF
+      // تصدير إلى PDF مع إضافة عمود الصفحات
       document.getElementById('exportPDF').addEventListener('click', async () => {
         if (!current) return alert('الرجاء اختيار طالب أولاً');
         
@@ -1453,7 +1715,7 @@
               <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${current}</td>
               <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${new Date().toLocaleDateString('ar-AR')}</td>
               <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">رجال مؤمنون</td>
-              <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">المشرف عبد الله</td>
+              <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${currentUser.email}</td>
             </tr>
           </table>
           
@@ -1499,6 +1761,7 @@
               <tr>
                 <th style="padding: 8px; border: 1px solid #ddd; background-color: #d4af37; color: white;">نوع التسميع</th>
                 <th style="padding: 8px; border: 1px solid #ddd; background-color: #d4af37; color: white;">الجزء</th>
+                <th style="padding: 8px; border: 1px solid #ddd; background-color: #d4af37; color: white;">الصفحات</th>
                 <th style="padding: 8px; border: 1px solid #ddd; background-color: #d4af37; color: white;">الأخطاء</th>
                 <th style="padding: 8px; border: 1px solid #ddd; background-color: #d4af37; color: white;">الترددات</th>
                 <th style="padding: 8px; border: 1px solid #ddd; background-color: #d4af37; color: white;">الخصم</th>
@@ -1508,17 +1771,18 @@
                   <tr>
                     <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${item.type}</td>
                     <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${item.part}</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${item.pages || 'كامل'}</td>
                     <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${item.errors}</td>
                     <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${item.reps}</td>
                     <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${item.totalPenalty.toFixed(2)}</td>
                   </tr>
                 `).join('') : `
                   <tr>
-                    <td colspan="5" style="text-align: center; padding: 1.5rem;">لا توجد خصومات مسجلة</td>
+                    <td colspan="6" style="text-align: center; padding: 1.5rem;">لا توجد خصومات مسجلة</td>
                   </tr>
                 `}
               <tr style="background: rgba(26, 95, 90, 0.1); font-weight: bold;">
-                <td colspan="4" style="font-weight: bold; text-align: center; padding: 8px; border: 1px solid #ddd;">إجمالي الخصومات</td>
+                <td colspan="5" style="font-weight: bold; text-align: center; padding: 8px; border: 1px solid #ddd;">إجمالي الخصومات</td>
                 <td style="font-weight: bold; padding: 8px; border: 1px solid #ddd; text-align: center;">${student.penDetails ? student.penDetails.reduce((sum, item) => sum + item.totalPenalty, 0).toFixed(2) : '0.00'}</td>
               </tr>
             </table>
@@ -1612,17 +1876,196 @@
         }, 3000);
       }
 
-      // اختيار أول طالب افتراضي
-      if (students.length > 0) {
-        const firstStudent = document.querySelector('.student-list li');
-        if (firstStudent) {
-          firstStudent.click();
+      // مسح بيانات الطالب الحالي
+      document.getElementById('clearCurrentData').addEventListener('click', async () => {
+        if (!current) return alert('الرجاء اختيار طالب أولاً');
+        if (!currentUser) return alert('الرجاء تسجيل الدخول أولاً');
+        
+        if (confirm(`هل تريد فعلاً مسح بيانات الطالب ${current}؟`)) {
+          delete studentData[current];
+          
+          // حذف بيانات الطالب من Firebase
+          await deleteStudentData(current);
+          
+          // تحديث واجهة المستخدم
+          document.getElementById('result').textContent = '- %';
+          document.getElementById('progressBar').style.width = '0%';
+          document.getElementById('statsList').innerHTML = '';
+          document.getElementById('penaltiesBody').innerHTML = '';
+          document.getElementById('focusPoints').textContent = '0';
+          document.getElementById('mushafPoints').textContent = '0';
+          
+          // إعادة تعيين حقول الإدخال
+          ['numFull', 'numSub', 'numNew', 'numHW', 'adab', 'time', 'focus'].forEach(id => {
+            document.getElementById(id).value = '';
+          });
+          document.getElementById('mushaf').checked = false;
+          ['fullContainer', 'subContainer', 'newContainer', 'hwContainer'].forEach(id => {
+            document.getElementById(id).innerHTML = '';
+          });
+          
+          // تحديث مؤشر البيانات المحفوظة
+          createStudentList();
+          document.querySelectorAll('.student-list li').forEach(li => {
+            if (li.textContent.includes(current)) {
+              li.classList.add('active');
+            }
+          });
+          
+          updateDashboard();
+        }
+      });
+
+      // مسح جميع البيانات
+      document.getElementById('clearDataBtn').addEventListener('click', async () => {
+        if (!currentUser) return alert('الرجاء تسجيل الدخول أولاً');
+        
+        if (confirm('هل تريد فعلاً مسح جميع بيانات الطلاب؟ هذا الإجراء لا يمكن التراجع عنه.')) {
+          studentData = {};
+          
+          // حذف جميع البيانات من Firebase
+          await clearAllData();
+          
+          // تحديث واجهة المستخدم
+          document.getElementById('result').textContent = '- %';
+          document.getElementById('progressBar').style.width = '0%';
+          document.getElementById('statsList').innerHTML = '';
+          document.getElementById('penaltiesBody').innerHTML = '';
+          document.getElementById('focusPoints').textContent = '0';
+          document.getElementById('mushafPoints').textContent = '0';
+          document.getElementById('rankingBody').innerHTML = '';
+          
+          // إعادة تعيين حقول الإدخال
+          ['numFull', 'numSub', 'numNew', 'numHW', 'adab', 'time', 'focus'].forEach(id => {
+            document.getElementById(id).value = '';
+          });
+          document.getElementById('mushaf').checked = false;
+          ['fullContainer', 'subContainer', 'newContainer', 'hwContainer'].forEach(id => {
+            document.getElementById(id).innerHTML = '';
+          });
+          
+          // تحديث مؤشر البيانات المحفوظة
+          createStudentList();
+          updateDashboard();
+        }
+      });
+      
+      // === وظائف Firebase ===
+      
+      // حفظ بيانات الطالب في Firebase
+      async function saveStudentData(studentName, data) {
+        if (!currentUser) return;
+        
+        try {
+          await db.collection('users').doc(currentUser.uid).collection('students').doc(studentName).set(data);
+          firebaseStatus.textContent = "تم حفظ بيانات الطالب بنجاح";
+          firebaseStatus.style.background = "rgba(39, 174, 96, 0.7)";
+        } catch (error) {
+          firebaseStatus.textContent = "خطأ في حفظ البيانات: " + error.message;
+          firebaseStatus.style.background = "rgba(231, 76, 60, 0.7)";
+          console.error("Firebase save error:", error);
         }
       }
       
-      // تحديث لوحة التحكم بشكل أولي
-      updateDashboard();
+      // تحميل بيانات الطلاب من Firebase
+      async function loadStudentData() {
+        if (!currentUser) return;
+        
+        try {
+          const snapshot = await db.collection('users').doc(currentUser.uid).collection('students').get();
+          studentData = {};
+          
+          snapshot.forEach(doc => {
+            studentData[doc.id] = doc.data();
+          });
+          
+          firebaseStatus.textContent = "تم تحميل بيانات الطلاب بنجاح";
+          firebaseStatus.style.background = "rgba(39, 174, 96, 0.7)";
+          
+          // إنشاء قائمة الطلاب
+          createStudentList();
+          
+          // اختيار أول طالب افتراضي
+          if (students.length > 0) {
+            const firstStudent = document.querySelector('.student-list li');
+            if (firstStudent) {
+              firstStudent.click();
+            }
+          }
+          
+          // تحديث لوحة التحكم بشكل أولي
+          updateDashboard();
+          
+        } catch (error) {
+          firebaseStatus.textContent = "خطأ في تحميل البيانات: " + error.message;
+          firebaseStatus.style.background = "rgba(231, 76, 60, 0.7)";
+          console.error("Firebase load error:", error);
+        }
+      }
+      
+      // حذف بيانات طالب من Firebase
+      async function deleteStudentData(studentName) {
+        if (!currentUser) return;
+        
+        try {
+          await db.collection('users').doc(currentUser.uid).collection('students').doc(studentName).delete();
+          firebaseStatus.textContent = "تم حذف بيانات الطالب بنجاح";
+          firebaseStatus.style.background = "rgba(39, 174, 96, 0.7)";
+        } catch (error) {
+          firebaseStatus.textContent = "خطأ في حذف البيانات: " + error.message;
+          firebaseStatus.style.background = "rgba(231, 76, 60, 0.7)";
+          console.error("Firebase delete error:", error);
+        }
+      }
+      
+      // مسح جميع البيانات من Firebase
+      async function clearAllData() {
+        if (!currentUser) return;
+        
+        try {
+          const snapshot = await db.collection('users').doc(currentUser.uid).collection('students').get();
+          
+          const batch = db.batch();
+          snapshot.forEach(doc => {
+            batch.delete(doc.ref);
+          });
+          
+          await batch.commit();
+          firebaseStatus.textContent = "تم مسح جميع البيانات بنجاح";
+          firebaseStatus.style.background = "rgba(39, 174, 96, 0.7)";
+        } catch (error) {
+          firebaseStatus.textContent = "خطأ في مسح البيانات: " + error.message;
+          firebaseStatus.style.background = "rgba(231, 76, 60, 0.7)";
+          console.error("Firebase clear error:", error);
+        }
+      }
+
+      // بدء تهيئة Firebase
+      initializeFirebase();
     });
+  </script>
+  <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "firebase/app";
+  import { getAnalytics } from "firebase/analytics";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+  
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyBDbGNmqeMNRz_q45worAx42zPoNPFGlQ4",
+    authDomain: "hemmah-8a5a8.firebaseapp.com",
+    projectId: "hemmah-8a5a8",
+    storageBucket: "hemmah-8a5a8.firebasestorage.app",
+    messagingSenderId: "832515158602",
+    appId: "1:832515158602:web:54fae9fccd4b61e655ecb3",
+    measurementId: "G-LZVS47NZGN"
+  };
+  
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
   </script>
 </body>
 </html>
