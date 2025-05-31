@@ -881,125 +881,6 @@
       z-index: 1000;
     }
 
-    /* الأنماط الجديدة للواجهة المعدلة */
-    .counter-controls {
-      display: flex;
-      align-items: center;
-      margin-bottom: 15px;
-      gap: 10px;
-    }
-    
-    .counter-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--primary);
-      color: white;
-      border: none;
-      font-size: 1.2rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: var(--transition);
-    }
-    
-    .counter-btn:hover {
-      background: var(--primary-dark);
-      transform: scale(1.05);
-    }
-    
-    .counter-btn.minus {
-      background: var(--danger);
-    }
-    
-    .counter-btn.minus:hover {
-      background: #c0392b;
-    }
-    
-    .counter-value {
-      font-size: 1.2rem;
-      font-weight: 700;
-      min-width: 50px;
-      text-align: center;
-      padding: 5px;
-      background: var(--light);
-      border-radius: var(--radius);
-    }
-    
-    .entry-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      margin-bottom: 15px;
-      padding: 15px;
-      background: rgba(26, 95, 90, 0.05);
-      border-radius: var(--radius);
-    }
-    
-    .entry-item {
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .entry-item label {
-      margin-bottom: 5px;
-      font-weight: 600;
-      color: var(--primary-dark);
-    }
-    
-    .entry-item input,
-    .entry-item select {
-      padding: 10px;
-      border: 1px solid rgba(0, 0, 0, 0.1);
-      border-radius: 8px;
-      background: var(--white);
-      font-family: 'Tajawal', sans-serif;
-      font-size: 1rem;
-      transition: var(--transition);
-    }
-    
-    .entry-item input:focus,
-    .entry-item select:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
-    }
-    
-    .entry-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 0;
-      border-bottom: 2px solid var(--primary-light);
-      margin-bottom: 10px;
-    }
-    
-    .entry-title {
-      font-weight: 700;
-      color: var(--primary-dark);
-      font-size: 1.1rem;
-    }
-    
-    .remove-entry-btn {
-      background: var(--danger);
-      color: white;
-      border: none;
-      border-radius: 5px;
-      width: 30px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-    
-    .remove-entry-btn:hover {
-      background: #c0392b;
-      transform: scale(1.1);
-    }
-
     @media (max-width: 992px) {
       .app {
         flex-direction: column;
@@ -1042,9 +923,6 @@
       }
       .btn {
         width: 100%;
-      }
-      .entry-grid {
-        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -1152,48 +1030,30 @@
       <section class="form-section">
         <h3>تقييم الطالب</h3>
         
-        <!-- الأجزاء الكاملة - النسخة الجديدة -->
-        <div class="form-group">
-          <label>الأجزاء الكاملة:</label>
-          <div class="counter-controls">
-            <button class="counter-btn minus" data-type="full">-</button>
-            <div class="counter-value" id="numFullCounter">0</div>
-            <button class="counter-btn plus" data-type="full">+</button>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>الأجزاء الكاملة:</label>
+            <select id="numFull"></select>
+            <div id="fullContainer"></div>
           </div>
-          <div id="fullContainer"></div>
-        </div>
-        
-        <!-- الأجزاء الجزئية - النسخة الجديدة -->
-        <div class="form-group">
-          <label>الأجزاء الجزئية:</label>
-          <div class="counter-controls">
-            <button class="counter-btn minus" data-type="sub">-</button>
-            <div class="counter-value" id="numSubCounter">0</div>
-            <button class="counter-btn plus" data-type="sub">+</button>
+          
+          <div class="form-group">
+            <label>الأجزاء الجزئية:</label>
+            <select id="numSub"></select>
+            <div id="subContainer"></div>
           </div>
-          <div id="subContainer"></div>
-        </div>
-        
-        <!-- التسميع الجديد - النسخة الجديدة -->
-        <div class="form-group">
-          <label>التسميع الجديد:</label>
-          <div class="counter-controls">
-            <button class="counter-btn minus" data-type="new">-</button>
-            <div class="counter-value" id="numNewCounter">0</div>
-            <button class="counter-btn plus" data-type="new">+</button>
+          
+          <div class="form-group">
+            <label>التسميع الجديد:</label>
+            <select id="numNew"></select>
+            <div id="newContainer"></div>
           </div>
-          <div id="newContainer"></div>
-        </div>
-        
-        <!-- جزء الواجب - النسخة الجديدة -->
-        <div class="form-group">
-          <label>جزء الواجب:</label>
-          <div class="counter-controls">
-            <button class="counter-btn minus" data-type="hw">-</button>
-            <div class="counter-value" id="numHWCounter">0</div>
-            <button class="counter-btn plus" data-type="hw">+</button>
+          
+          <div class="form-group">
+            <label>جزء الواجب:</label>
+            <select id="numHW"></select>
+            <div id="hwContainer"></div>
           </div>
-          <div id="hwContainer"></div>
         </div>
         
         <div class="form-grid">
@@ -1435,6 +1295,9 @@
       }
 
       // ملء القوائم المنسدلة
+      ['numFull', 'numSub', 'numNew', 'numHW'].forEach(id => 
+        fillSelect(document.getElementById(id), 0, MAX_PARTS));
+
       fillSelect(document.getElementById('adab'), 0, 20);
       fillSelect(document.getElementById('focus'), 1, 3);
 
@@ -1450,102 +1313,45 @@
         });
       }
 
-      // إنشاء صف إدخال جديد مع حقول الجزء والأخطاء والترددات
+      // إنشاء صف في الحاوية
       function createRow(cnt, type) {
-        const entryId = Date.now() + Math.floor(Math.random() * 1000);
-        const row = document.createElement('div');
-        row.className = 'entry-grid';
-        row.id = `entry-${entryId}`;
-        
-        // عنوان الصف مع زر الحذف
-        const header = document.createElement('div');
-        header.className = 'entry-header';
-        header.innerHTML = `
-          <div class="entry-title">مدخل جديد</div>
-          <button class="remove-entry-btn" data-entry="${entryId}">
-            <i class="fas fa-times"></i>
-          </button>
-        `;
-        row.appendChild(header);
-        
-        // حقل الجزء
-        const partDiv = document.createElement('div');
-        partDiv.className = 'entry-item';
-        partDiv.innerHTML = `
-          <label>الجزء</label>
-          <select class="part-select">
-            ${Array.from({length: MAX_PARTS}, (_, i) => 
-              `<option value="${i+1}">${i+1}</option>`).join('')}
-          </select>
-        `;
-        row.appendChild(partDiv);
-        
-        // حقل الأخطاء
-        const errorsDiv = document.createElement('div');
-        errorsDiv.className = 'entry-item';
-        errorsDiv.innerHTML = `
-          <label>عدد الأخطاء</label>
-          <input type="number" min="0" class="errors-input" placeholder="0" value="0">
-        `;
-        row.appendChild(errorsDiv);
-        
-        // حقل الترددات
-        const repsDiv = document.createElement('div');
-        repsDiv.className = 'entry-item';
-        repsDiv.innerHTML = `
-          <label>عدد الترددات</label>
-          <input type="number" min="0" class="reps-input" placeholder="0" value="0">
-        `;
-        row.appendChild(repsDiv);
-        
-        // للأنواع غير الكاملة، نضيف حقل الصفحات
-        if (type !== 'full') {
-          const pagesDiv = document.createElement('div');
-          pagesDiv.className = 'entry-item';
-          pagesDiv.innerHTML = `
-            <label>عدد الصفحات</label>
-            <input type="number" min="1" class="pages-input" placeholder="1" value="1">
-          `;
-          row.appendChild(pagesDiv);
+        let row = document.createElement('div');
+        row.className = 'form-grid';
+        if (['sub', 'new', 'hw'].includes(type)) {
+          let ip = document.createElement('input');
+          ip.type = 'number';
+          ip.placeholder = 'عدد الصفحات';
+          ip.min = 0;
+          ip.className = 'form-control';
+          row.appendChild(ip);
         }
-        
+        let sel = document.createElement('select');
+        for (let p = 1; p <= MAX_PARTS; p++) {
+          let o = document.createElement('option');
+          o.value = p;
+          o.textContent = p;
+          sel.appendChild(o);
+        }
+        row.appendChild(sel);
+        ['أخطاء', 'تكرار'].forEach(ph => {
+          let inp = document.createElement('input');
+          inp.type = 'number';
+          inp.placeholder = ph;
+          inp.min = 0;
+          inp.className = 'form-control';
+          row.appendChild(inp);
+        });
         cnt.appendChild(row);
-        
-        // إضافة حدث لحذف الصف
-        row.querySelector('.remove-entry-btn').addEventListener('click', function() {
-          const entryId = this.dataset.entry;
-          document.getElementById(`entry-${entryId}`).remove();
-        });
-      }
-
-      // إعداد أزرار الزيادة والنقصان
-      function setupCounterButtons() {
-        document.querySelectorAll('.counter-btn').forEach(btn => {
-          btn.addEventListener('click', function() {
-            const type = this.dataset.type;
-            const counter = document.getElementById(`num${type.charAt(0).toUpperCase() + type.slice(1)}Counter`);
-            let value = parseInt(counter.textContent) || 0;
-            
-            if (this.classList.contains('minus')) {
-              if (value > 0) value--;
-            } else {
-              value++;
-            }
-            
-            counter.textContent = value;
-            document.getElementById(`num${type.charAt(0).toUpperCase() + type.slice(1)}`).value = value;
-            document.getElementById(`num${type.charAt(0).toUpperCase() + type.slice(1)}`).dispatchEvent(new Event('change'));
-          });
-        });
       }
 
       // معالجة تغيير عدد الأجزاء
-      ['full', 'sub', 'new', 'hw'].forEach((type) => {
-        document.getElementById(`num${type.charAt(0).toUpperCase() + type.slice(1)}`).addEventListener('change', e => {
-          let cnt = document.getElementById(`${type}Container`);
+      ['numFull', 'numSub', 'numNew', 'numHW'].forEach((id, i) => {
+        document.getElementById(id).addEventListener('change', e => {
+          let ids = ['fullContainer', 'subContainer', 'newContainer', 'hwContainer'];
+          let cnt = document.getElementById(ids[i]);
           cnt.innerHTML = '';
           for (let k = 0; k < +e.target.value; k++) {
-            createRow(cnt, type);
+            createRow(cnt, ids[i].replace('Container', ''));
           }
         });
       });
@@ -1576,21 +1382,12 @@
         li.classList.add('active');
         document.getElementById('currentName').textContent = `تقييم الطالب: ${name}`;
         let d = studentData[name] || {};
-        ['adab', 'time', 'focus'].forEach(id => {
+        ['numFull', 'numSub', 'numNew', 'numHW', 'adab', 'time', 'focus'].forEach(id => {
           if (d[id] != null) document.getElementById(id).value = d[id];
         });
-        
-        // تعبئة أعداد الأجزاء
-        ['full', 'sub', 'new', 'hw'].forEach(type => {
-          const id = `num${type.charAt(0).toUpperCase() + type.slice(1)}`;
-          if (d[id] != null) {
-            document.getElementById(id).value = d[id];
-            document.getElementById(`${id}Counter`).textContent = d[id];
-            document.getElementById(id).dispatchEvent(new Event('change'));
-          }
-        });
-        
         document.getElementById('mushaf').checked = d.mushaf || false;
+        ['numFull', 'numSub', 'numNew', 'numHW'].forEach(id => 
+          document.getElementById(id).dispatchEvent(new Event('change')));
         document.getElementById('statsSection').style.display = 'block';
         document.getElementById('rankingSection').style.display = 'block';
         document.getElementById('penaltiesSection').style.display = 'block';
@@ -1607,22 +1404,26 @@
         
         // تعبئة حقول الأخطاء والتكرارات بعد إنشاء الحقول
         setTimeout(() => {
-          ['full', 'sub', 'new', 'hw'].forEach(type => {
-            const container = document.getElementById(`${type}Container`);
-            const containerData = d[`${type}Container`];
-            
-            if (container && containerData && Array.isArray(containerData)) {
-              const rows = container.querySelectorAll('.entry-grid');
+          ['fullContainer', 'subContainer', 'newContainer', 'hwContainer'].forEach(containerId => {
+            const container = document.getElementById(containerId);
+            if (container && d[containerId] && Array.isArray(d[containerId])) {
+              const rows = container.querySelectorAll('.form-grid');
               rows.forEach((row, index) => {
-                const itemData = containerData[index];
+                const itemData = d[containerId][index];
                 if (itemData) {
-                  row.querySelector('.part-select').value = itemData.part;
-                  row.querySelector('.errors-input').value = itemData.errors || 0;
-                  row.querySelector('.reps-input').value = itemData.reps || 0;
+                  const inputs = row.querySelectorAll('input, select');
+                  let inputIndex = 0;
                   
-                  if (type !== 'full') {
-                    row.querySelector('.pages-input').value = itemData.pages || 1;
+                  // تعبئة حقول الصفحات (إن وجدت)
+                  if (containerId !== 'fullContainer') {
+                    inputs[inputIndex].value = itemData.pages || '';
+                    inputIndex++;
                   }
+                  
+                  // تعبئة حقول الجزء والأخطاء والتكرارات
+                  inputs[inputIndex++].value = itemData.part;
+                  inputs[inputIndex++].value = itemData.errors || 0;
+                  inputs[inputIndex++].value = itemData.reps || 0;
                 }
               });
             }
@@ -1762,27 +1563,19 @@
         // جمع العناصر وحساب الأجزاء المعادلة
         Object.entries(containers).forEach(([cid, info]) => {
           d[cid] = [];
-          document.querySelectorAll(`#${cid} .entry-grid`).forEach(entry => {
-            const part = +entry.querySelector('.part-select').value;
-            const errors = +entry.querySelector('.errors-input').value;
-            const reps = +entry.querySelector('.reps-input').value;
-            let pages = 1;
-            
-            if (cid !== 'fullContainer') {
-              pages = +entry.querySelector('.pages-input').value;
-            }
-
-            const equivalentParts = pages / info.pagesPerPart;
+          document.querySelectorAll(`#${cid} .form-grid`).forEach(r => {
+            const inputs = r.querySelectorAll('input, select');
+            let idx = 0;
             const item = {
               type: info.type,
-              part,
-              pages: cid !== 'fullContainer' ? pages : undefined,
-              errors,
-              reps,
-              equivalentParts
+              pages: inputs.length > 3 ? +inputs[idx++].value : 0,
+              part: +inputs[idx++].value,
+              errors: +inputs[idx++].value,
+              reps: +inputs[idx++].value
             };
 
-            allItems.push(item);
+            const equivalentParts = item.pages ? item.pages / info.pagesPerPart : 1;
+            allItems.push({...item, equivalentParts});
             d.totalEquivalentParts += equivalentParts;
             d[cid].push(item);
           });
@@ -2123,17 +1916,13 @@
           document.getElementById('mushafPoints').textContent = '0';
           
           // إعادة تعيين حقول الإدخال
-          ['adab', 'time', 'focus'].forEach(id => {
+          ['numFull', 'numSub', 'numNew', 'numHW', 'adab', 'time', 'focus'].forEach(id => {
             document.getElementById(id).value = '';
           });
-          
-          ['full', 'sub', 'new', 'hw'].forEach(type => {
-            document.getElementById(`num${type.charAt(0).toUpperCase() + type.slice(1)}`).value = '';
-            document.getElementById(`num${type.charAt(0).toUpperCase() + type.slice(1)}Counter`).textContent = '0';
-            document.getElementById(`${type}Container`).innerHTML = '';
-          });
-          
           document.getElementById('mushaf').checked = false;
+          ['fullContainer', 'subContainer', 'newContainer', 'hwContainer'].forEach(id => {
+            document.getElementById(id).innerHTML = '';
+          });
           
           // تحديث مؤشر البيانات المحفوظة
           createStudentList();
@@ -2167,17 +1956,13 @@
           document.getElementById('rankingBody').innerHTML = '';
           
           // إعادة تعيين حقول الإدخال
-          ['adab', 'time', 'focus'].forEach(id => {
+          ['numFull', 'numSub', 'numNew', 'numHW', 'adab', 'time', 'focus'].forEach(id => {
             document.getElementById(id).value = '';
           });
-          
-          ['full', 'sub', 'new', 'hw'].forEach(type => {
-            document.getElementById(`num${type.charAt(0).toUpperCase() + type.slice(1)}`).value = '';
-            document.getElementById(`num${type.charAt(0).toUpperCase() + type.slice(1)}Counter`).textContent = '0';
-            document.getElementById(`${type}Container`).innerHTML = '';
-          });
-          
           document.getElementById('mushaf').checked = false;
+          ['fullContainer', 'subContainer', 'newContainer', 'hwContainer'].forEach(id => {
+            document.getElementById(id).innerHTML = '';
+          });
           
           // تحديث مؤشر البيانات المحفوظة
           createStudentList();
@@ -2307,7 +2092,6 @@
 
       // بدء تهيئة Firebase
       initializeFirebase();
-      setupCounterButtons();
     });
   </script>
 </body>
