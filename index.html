@@ -1,18 +1,20 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+
+<html dir="rtl" lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>نظام التقييم القرآني المتطور </title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore-compat.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-  <style>
+<meta content="300" http-equiv="refresh"/>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>نظام التقييم القرآني المتطور </title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore-compat.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet"/>
+<style>
     @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700;800&display=swap');
     @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
     
@@ -881,6 +883,92 @@
       z-index: 1000;
     }
 
+    /* واجهة أولياء الأمور */
+    
+    
+    
+.parent-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #101c1a, #0a1413);
+  background-image: url('https://www.transparenttextures.com/patterns/dark-mosaic.png');
+  z-index: 2000;
+  display: none;
+  flex-direction: column;
+  padding: 20px;
+  overflow-y: auto;
+  color: #dfe9e3;
+  font-family: 'Amiri', serif;
+  backdrop-filter: blur(4px);
+}
+
+
+
+    
+    .parent-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    .parent-header h1 {
+      color: var(--primary-dark);
+      font-size: 1.8rem;
+      margin: 0;
+    }
+    
+    .close-parent-btn {
+      background: var(--danger);
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    .parent-student-select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    
+    /* تعديلات لأزرار الإضافة والحذف */
+    .add-remove-buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    
+    .add-btn, .remove-btn {
+      padding: 8px 15px;
+      border-radius: 5px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .add-btn {
+      background: var(--success);
+      color: white;
+    }
+    
+    .remove-btn {
+      background: var(--danger);
+      color: white;
+    }
+
     @media (max-width: 992px) {
       .app {
         flex-direction: column;
@@ -925,252 +1013,419 @@
         width: 100%;
       }
     }
-  </style>
+  
+/* تحسين واجهة أولياء الأمور */
+.parent-container {
+  background: linear-gradient(135deg, #f3f4f6, #dbeafe);
+  font-family: 'Amiri', serif;
+  color: #1e293b;
+  padding: 40px;
+  box-shadow: inset 0 0 60px rgba(0,0,0,0.05);
+}
+
+.parent-header h1 {
+  font-size: 2rem;
+  color: #1e40af;
+  border-bottom: 2px solid #1e3a8a;
+  padding-bottom: 10px;
+}
+
+.parent-student-select {
+  border: 2px solid #1e3a8a;
+  border-radius: 12px;
+  font-size: 1rem;
+  padding: 12px;
+  background: #ffffff;
+  color: #1e293b;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+#parentStudentInfo .card {
+  border: 1px solid #1e3a8a;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  padding: 20px;
+  background: #f9fafb;
+  margin-bottom: 20px;
+}
+
+.penalties-table {
+  border: 1px solid #1e3a8a;
+  background: #f8fafc;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.penalties-table th {
+  background: #1e3a8a;
+  color: white;
+}
+
+.penalties-table td {
+  background: #ffffff;
+  color: #1e293b;
+}
+
+/* تلوين بطاقات الإحصائيات لواجهة أولياء الأمور */
+#parentStudentInfo .stat-card {
+  padding: 1.5rem;
+  border-radius: 12px;
+  color: white;
+  font-family: 'Tajawal', sans-serif;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+#parentStudentInfo .stat-card:nth-child(1) {
+  background: linear-gradient(to right, #3b82f6, #1e3a8a); /* الأجزاء المعادلة */
+}
+#parentStudentInfo .stat-card:nth-child(2) {
+  background: linear-gradient(to right, #22c55e, #15803d); /* الأدب */
+}
+#parentStudentInfo .stat-card:nth-child(3) {
+  background: linear-gradient(to right, #f59e0b, #b45309); /* الحضور */
+}
+#parentStudentInfo .stat-card:nth-child(4) {
+  background: linear-gradient(to right, #ef4444, #991b1b); /* الحفظ */
+}
+
+#parentStudentInfo .stat-card .value {
+  font-size: 2.2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+#parentStudentInfo .stat-card .desc {
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+/* بطاقات مريحة للعين */
+#parentStudentInfo .stat-card:nth-child(1) {
+  background: linear-gradient(to right, #dbeafe, #bfdbfe); /* أزرق فاتح */
+}
+#parentStudentInfo .stat-card:nth-child(2) {
+  background: linear-gradient(to right, #dcfce7, #bbf7d0); /* أخضر فاتح */
+}
+#parentStudentInfo .stat-card:nth-child(3) {
+  background: linear-gradient(to right, #fef9c3, #fde68a); /* أصفر هادئ */
+}
+#parentStudentInfo .stat-card:nth-child(4) {
+  background: linear-gradient(to right, #fee2e2, #fecaca); /* وردي فاتح */
+}
+#parentStudentInfo .stat-card {
+  color: #1f2937;
+}
+
+/* قائمة أسماء احترافية */
+.parent-student-select {
+  font-size: 1.1rem;
+  padding: 14px;
+  border: 2px solid #1e3a8a;
+  border-radius: 10px;
+  background: white;
+  color: #1f2937;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* ترويسة يوم الهمة وعبارة البسملة */
+#parentContainer::before {
+  content: "﷽";
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  font-size: 3rem;
+  color: #1e3a8a;
+  font-family: 'Amiri', serif;
+  z-index: 1;
+  opacity: 0.15;
+}
+
+.himmah-title {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #1e3a8a;
+  text-align: center;
+  margin-bottom: 10px;
+  font-family: 'Amiri', serif;
+}
+
+.basmala {
+  text-align: center;
+  font-size: 1.4rem;
+  font-family: 'Amiri', serif;
+  color: #374151;
+  margin-bottom: 30px;
+}
+</style>
 </head>
 <body>
-  <div class="login-container" id="loginContainer">
-    <div class="login-box">
-      <h2>تسجيل الدخول إلى النظام</h2>
-      <input type="email" class="login-input" id="emailInput" placeholder="البريد الإلكتروني">
-      <input type="password" class="login-input" id="passwordInput" placeholder="كلمة المرور">
-      <button class="login-btn" id="loginBtn">تسجيل الدخول</button>
-      <div class="login-message" id="loginMessage"></div>
-    </div>
-  </div>
-  
-  <div class="app" style="display:none" id="appContainer">
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <h1>نظام التقييم القرآني</h1>
-        <h2>مركز حكما القرآني</h2>
-      </div>
-      
-      <div class="search-box">
-        <div class="add-student-btn" style="padding: 10px; text-align: center;">
-          <button id="addStudentBtn" class="btn btn-secondary" style="width: 100%; margin-bottom: 10px;">
-            <i class="fas fa-user-plus"></i> إضافة طالب
+<!-- واجهة تسجيل الدخول للمعلم -->
+<div class="login-container" id="loginContainer">
+<div class="login-box">
+<h2>تسجيل الدخول إلى النظام</h2>
+<input class="login-input" id="emailInput" placeholder="البريد الإلكتروني" type="email"/>
+<input class="login-input" id="passwordInput" placeholder="كلمة المرور" type="password"/>
+<button class="login-btn" id="loginBtn">تسجيل الدخول</button>
+<div class="login-message" id="loginMessage"></div>
+<button class="btn btn-secondary" id="showParentView" style="margin-top: 15px; width: 100%;">
+<i class="fas fa-eye"></i> عرض واجهة أولياء الأمور
+      </button>
+</div>
+</div>
+<!-- واجهة المعلم الرئيسية -->
+<div class="app" id="appContainer" style="display:none">
+<aside class="sidebar">
+<div class="sidebar-header">
+<h1>نظام التقييم القرآني</h1>
+<h2>مركز حكما القرآني</h2>
+</div>
+<div class="search-box">
+<div class="add-student-btn" style="padding: 10px; text-align: center;">
+<button class="btn btn-secondary" id="addStudentBtn" style="width: 100%; margin-bottom: 10px;">
+<i class="fas fa-user-plus"></i> إضافة طالب
           </button>
-          <div id="studentPrompt" style="display:none; padding-top: 10px;">
-            <input type="text" id="newStudentName" placeholder="اسم الطالب الجديد" class="login-input" style="margin-bottom: 1rem;">
-            <button id="confirmAddStudent" class="btn btn-primary">تأكيد الإضافة</button>
-          </div>
-        </div>
-        <input type="text" placeholder="ابحث عن طالب...">
+<div id="studentPrompt" style="display:none; padding-top: 10px;">
+<input class="login-input" id="newStudentName" placeholder="اسم الطالب الجديد" style="margin-bottom: 1rem;" type="text"/>
+<button class="btn btn-primary" id="confirmAddStudent">تأكيد الإضافة</button>
+</div>
+</div>
+<input placeholder="ابحث عن طالب..." type="text"/>
+</div>
+<ul class="student-list" id="studentList"></ul>
+<div class="clear-data-btn" id="clearDataBtn">
+<i class="fas fa-trash-alt"></i> مسح جميع البيانات
       </div>
-      
-      <ul class="student-list" id="studentList"></ul>
-      
-      <div class="clear-data-btn" id="clearDataBtn">
-        <i class="fas fa-trash-alt"></i> مسح جميع البيانات
-      </div>
-    </aside>
-    
-    <main class="main">
-      <div class="header">
-        <h3 id="currentName">لوحة تحكم المعلم</h3>
-        <div class="header-info">
-          <div class="date-box">
-            <i class="fas fa-calendar"></i>
-            <span id="currentDate">اليوم: الأربعاء 28 مايو 2025</span>
-          </div>
-          <div class="user-box">
-            <div class="avatar" id="userAvatar">م</div>
-            <div class="user-info">
-              <div class="user-name" id="userName"></div>
-              <div class="user-role" id="userRole">مشرف الشعبة</div>
-            </div>
-            <button class="btn btn-danger" id="logoutBtn" style="padding: 8px 15px;">
-              <i class="fas fa-sign-out-alt"></i> خروج
+</aside>
+<main class="main">
+<div class="header">
+<h3 id="currentName">لوحة تحكم المعلم</h3>
+<div class="header-info">
+<div class="date-box">
+<i class="fas fa-calendar"></i>
+<span id="currentDate">اليوم: الأربعاء 28 مايو 2025</span>
+</div>
+<div class="user-box">
+<div class="avatar" id="userAvatar">م</div>
+<div class="user-info">
+<div class="user-name" id="userName"></div>
+<div class="user-role" id="userRole">مشرف الشعبة</div>
+</div>
+<button class="btn btn-danger" id="logoutBtn" style="padding: 8px 15px;">
+<i class="fas fa-sign-out-alt"></i> خروج
             </button>
-          </div>
-        </div>
-      </div>
-      
-      <div class="dashboard">
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">إجمالي الطلاب</div>
-            <div class="card-icon">
-              <i class="fas fa-users"></i>
-            </div>
-          </div>
-          <div class="card-content">
-            <div class="value" id="totalStudents">5</div>
-            <div class="desc">طلاب مسجلين في النظام</div>
-          </div>
-        </div>
-        
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">أعلى تقييم</div>
-            <div class="card-icon">
-              <i class="fas fa-trophy"></i>
-            </div>
-          </div>
-          <div class="card-content">
-            <div class="value" id="highestScore">00%</div>
-            <div class="desc" id="highestStudent">اسم الطالب</div>
-          </div>
-        </div>
-        
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">متوسط التقييم</div>
-            <div class="card-icon">
-              <i class="fas fa-chart-line"></i>
-            </div>
-          </div>
-          <div class="card-content">
-            <div class="value" id="averageScore">00%</div>
-            <div class="desc">متوسط أداء المجموعة</div>
-          </div>
-        </div>
-      </div>
-      
-      <section class="form-section">
-        <h3>تقييم الطالب</h3>
-        
-        <div class="form-grid">
-          <div class="form-group">
-            <label>الأجزاء الكاملة:</label>
-            <select id="numFull"></select>
-            <div id="fullContainer"></div>
-          </div>
-          
-          <div class="form-group">
-            <label>الأجزاء الجزئية:</label>
-            <select id="numSub"></select>
-            <div id="subContainer"></div>
-          </div>
-          
-          <div class="form-group">
-            <label>التسميع الجديد:</label>
-            <select id="numNew"></select>
-            <div id="newContainer"></div>
-          </div>
-          
-          <div class="form-group">
-            <label>جزء الواجب:</label>
-            <select id="numHW"></select>
-            <div id="hwContainer"></div>
-          </div>
-        </div>
-        
-        <div class="form-grid">
-          <div class="form-group">
-            <label>نقاط الأدب:</label>
-            <select id="adab"></select>
-          </div>
-          
-          <div class="form-group">
-            <label>ساعة الحضور:</label>
-            <select id="time"></select>
-          </div>
-          
-          <div class="form-group">
-            <label>التركيز:</label>
-            <select id="focus"></select>
-          </div>
-          
-          <div class="form-group">
-            <label style="margin-bottom: 1.2rem;">أحضر المصحف:</label>
-            <div class="checkbox-group">
-              <input type="checkbox" id="mushaf">
-              <label for="mushaf">نعم، أحضر المصحف</label>
-            </div>
-          </div>
-        </div>
-        
-        <div class="result-container">
-          <div class="result-label">التقييم النهائي</div>
-          <div class="result-value" id="result">- %</div>
-          <div class="result-desc">هذا التقييم يعكس أداء الطالب بناءً على المعايير المحددة</div>
-          <div class="progress-container">
-            <div class="progress-bar" id="progressBar" style="width: 0%"></div>
-          </div>
-        </div>
-        
-        <div class="action-buttons">
-          <button class="btn btn-primary" id="calculate">
-            <i class="fas fa-calculator"></i> احسب التقييم
+</div>
+</div>
+</div>
+<div class="dashboard">
+<div class="card">
+<div class="card-header">
+<div class="card-title">إجمالي الطلاب</div>
+<div class="card-icon">
+<i class="fas fa-users"></i>
+</div>
+</div>
+<div class="card-content">
+<div class="value" id="totalStudents">5</div>
+<div class="desc">طلاب مسجلين في النظام</div>
+</div>
+</div>
+<div class="card">
+<div class="card-header">
+<div class="card-title">أعلى تقييم</div>
+<div class="card-icon">
+<i class="fas fa-trophy"></i>
+</div>
+</div>
+<div class="card-content">
+<div class="value" id="highestScore">00%</div>
+<div class="desc" id="highestStudent">اسم الطالب</div>
+</div>
+</div>
+<div class="card">
+<div class="card-header">
+<div class="card-title">متوسط التقييم</div>
+<div class="card-icon">
+<i class="fas fa-chart-line"></i>
+</div>
+</div>
+<div class="card-content">
+<div class="value" id="averageScore">00%</div>
+<div class="desc">متوسط أداء المجموعة</div>
+</div>
+</div>
+</div>
+<section class="form-section">
+<h3>تقييم الطالب</h3>
+<!-- الأجزاء الكاملة -->
+<div class="form-group">
+<label>الأجزاء الكاملة:</label>
+<div class="add-remove-buttons">
+<button class="add-btn" id="addFullBtn">
+<i class="fas fa-plus"></i> إضافة جزء كامل
+            </button>
+<button class="remove-btn" id="removeFullBtn">
+<i class="fas fa-minus"></i> حذف جزء كامل
+            </button>
+</div>
+<div id="fullContainer"></div>
+</div>
+<!-- الأجزاء الجزئية -->
+<div class="form-group">
+<label>الأجزاء الجزئية:</label>
+<div class="add-remove-buttons">
+<button class="add-btn" id="addSubBtn">
+<i class="fas fa-plus"></i> إضافة جزء جزئي
+            </button>
+<button class="remove-btn" id="removeSubBtn">
+<i class="fas fa-minus"></i> حذف جزء جزئي
+            </button>
+</div>
+<div id="subContainer"></div>
+</div>
+<!-- التسميع الجديد -->
+<div class="form-group">
+<label>التسميع الجديد:</label>
+<div class="add-remove-buttons">
+<button class="add-btn" id="addNewBtn">
+<i class="fas fa-plus"></i> إضافة تسميع جديد
+            </button>
+<button class="remove-btn" id="removeNewBtn">
+<i class="fas fa-minus"></i> حذف تسميع جديد
+            </button>
+</div>
+<div id="newContainer"></div>
+</div>
+<!-- جزء الواجب -->
+<div class="form-group">
+<label>جزء الواجب:</label>
+<div class="add-remove-buttons">
+<button class="add-btn" id="addHwBtn">
+<i class="fas fa-plus"></i> إضافة واجب
+            </button>
+<button class="remove-btn" id="removeHwBtn">
+<i class="fas fa-minus"></i> حذف واجب
+            </button>
+</div>
+<div id="hwContainer"></div>
+</div>
+<div class="form-grid">
+<div class="form-group">
+<label>نقاط الأدب:</label>
+<select id="adab"></select>
+</div>
+<div class="form-group">
+<label>ساعة الحضور:</label>
+<select id="time"></select>
+</div>
+<div class="form-group">
+<label>التركيز:</label>
+<select id="focus"></select>
+</div>
+<div class="form-group">
+<label style="margin-bottom: 1.2rem;">أحضر المصحف:</label>
+<div class="checkbox-group">
+<input id="mushaf" type="checkbox"/>
+<label for="mushaf">نعم، أحضر المصحف</label>
+</div>
+</div>
+</div>
+<div class="result-container animate__animated animate__fadeInDown" style="background: rgba(36, 58, 54, 0.85); border: 1px solid #2f4f4f; border-radius: 16px; box-shadow: 0 0 10px #3a766d; color: #f7f1cf;">
+<div class="result-label">التقييم النهائي</div>
+<div class="result-value" id="result">- %</div>
+<div class="result-desc">هذا التقييم يعكس أداء الطالب بناءً على المعايير المحددة</div>
+<div class="progress-container">
+<div class="progress-bar" id="progressBar" style="width: 0%"></div>
+</div>
+</div>
+<div class="action-buttons">
+<button class="btn btn-primary" id="calculate">
+<i class="fas fa-calculator"></i> احسب التقييم
           </button>
-          <button class="btn btn-secondary" id="showRanking">
-            <i class="fas fa-trophy"></i> عرض الترتيب
+<button class="btn btn-secondary" id="showRanking">
+<i class="fas fa-trophy"></i> عرض الترتيب
           </button>
-          <button class="btn btn-warning" id="exportExcel">
-            <i class="fas fa-file-excel"></i> تصدير إكسل
+<button class="btn btn-warning" id="exportExcel">
+<i class="fas fa-file-excel"></i> تصدير إكسل
           </button>
-          <button class="btn btn-secondary" id="exportPDF">
-            <i class="fas fa-file-pdf"></i> تصدير تقرير PDF
+<button class="btn btn-secondary" id="exportPDF">
+<i class="fas fa-file-pdf"></i> تصدير تقرير PDF
           </button>
-          <button class="btn btn-danger" id="clearCurrentData">
-            <i class="fas fa-eraser"></i> مسح بيانات الطالب الحالي
+<button class="btn btn-danger" id="clearCurrentData">
+<i class="fas fa-eraser"></i> مسح بيانات الطالب الحالي
           </button>
-        </div>
-      </section>
-      
-      <section class="stats-section" id="statsSection">
-        <h3>تفاصيل التقييم</h3>
-        <div class="stats-grid" id="statsList"></div>
-        
-        <div class="stats-grid">
-          <div class="focus-card">
-            <h4>نقاط الحفظ للتركيز</h4>
-            <div class="value" id="focusPoints">0</div>
-            <div class="desc">من أصل 3 نقاط</div>
-          </div>
-          
-          <div class="mushaf-card">
-            <h4>نقاط إحضار المصحف</h4>
-            <div class="value" id="mushafPoints">0</div>
-            <div class="desc">من أصل نقطتين</div>
-          </div>
-        </div>
-        
-        <div class="detail-section" id="penaltiesSection">
-          <h4>تفاصيل الخصومات</h4>
-          <table class="penalties-table">
-            <thead>
-              <tr>
-                <th>نوع التسميع</th>
-                <th>الجزء</th>
-                <th>الصفحات</th>
-                <th>الأخطاء</th>
-                <th>الترددات</th>
-                <th>الخصم</th>
-              </tr>
-            </thead>
-            <tbody id="penaltiesBody"></tbody>
-          </table>
-        </div>
-      </section>
-      
-      <section class="ranking-section" id="rankingSection">
-        <h3>ترتيب الطلاب</h3>
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>المركز</th>
-                <th>الاسم</th>
-                <th>الأجزاء الكاملة</th>
-                <th>نقاط الأدب</th>
-                <th>نقاط الحضور</th>
-                <th>النسبة (%)</th>
-                <th>الحالة</th>
-              </tr>
-            </thead>
-            <tbody id="rankingBody"></tbody>
-          </table>
-        </div>
-      </section>
-    </main>
-  </div>
-  
-  <div class="export-message" id="exportMessage">تم تصدير البيانات بنجاح</div>
-  <div class="firebase-status" id="firebaseStatus">جارٍ الاتصال بـ Firebase...</div>
-  
-  <script>
+</div>
+</section>
+<section class="stats-section" id="statsSection">
+<h3>تفاصيل التقييم</h3>
+<div class="stats-grid" id="statsList"></div>
+<div class="stats-grid">
+<div class="focus-card">
+<h4>نقاط الحفظ للتركيز</h4>
+<div class="value" id="focusPoints">0</div>
+<div class="desc">من أصل 3 نقاط</div>
+</div>
+<div class="mushaf-card">
+<h4>نقاط إحضار المصحف</h4>
+<div class="value" id="mushafPoints">0</div>
+<div class="desc">من أصل نقطتين</div>
+</div>
+</div>
+<div class="detail-section" id="penaltiesSection">
+<h4>تفاصيل الخصومات</h4>
+<table class="penalties-table animate__animated animate__fadeIn" style="background:rgba(0,0,0,0.25);color:#f0f0f0;border-radius:12px;">
+<thead>
+<tr>
+<th>نوع التسميع</th>
+<th>الجزء</th>
+<th>الصفحات</th>
+<th>الأخطاء</th>
+<th>الترددات</th>
+<th>الخصم</th>
+</tr>
+</thead>
+<tbody id="penaltiesBody"></tbody>
+</table>
+</div>
+</section>
+<section class="ranking-section" id="rankingSection">
+<h3>ترتيب الطلاب</h3>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>المركز</th>
+<th>الاسم</th>
+<th>الأجزاء الكاملة</th>
+<th>نقاط الأدب</th>
+<th>نقاط الحضور</th>
+<th>النسبة (%)</th>
+<th>الحالة</th>
+</tr>
+</thead>
+<tbody id="rankingBody"></tbody>
+</table>
+</div>
+</section>
+</main>
+</div>
+<!-- واجهة أولياء الأمور -->
+<div class="parent-container" id="parentContainer">
+<div class="himmah-title">يوم الهمة</div><div class="basmala"></div><div class="parent-header animate__animated animate__fadeInDown">
+<h1>نظام متابعة الطالب - واجهة أولياء الأمور</h1>
+<button class="close-parent-btn" id="closeParentBtn">
+<i class="fas fa-times"></i> إغلاق
+      </button>
+</div>
+<select class="parent-student-select animate__animated animate__fadeInUp" id="parentStudentSelect">
+<option value="">اختر اسم الطالب</option>
+</select>
+<div id="parentStudentInfo"></div>
+</div>
+<div class="export-message" id="exportMessage">تم تصدير البيانات بنجاح</div>
+<div class="firebase-status" id="firebaseStatus">جارٍ الاتصال بـ Firebase...</div>
+<script>
     document.addEventListener('DOMContentLoaded', () => {
       // بيانات الصعوبة
       const diff = {
@@ -1210,6 +1465,7 @@
       const loginContainer = document.getElementById('loginContainer');
       const appContainer = document.getElementById('appContainer');
       const firebaseStatus = document.getElementById('firebaseStatus');
+      const parentContainer = document.getElementById('parentContainer');
       
       // تهيئة Firebase
       function initializeFirebase() {
@@ -1284,6 +1540,158 @@
         auth.signOut();
       });
       
+      // عرض واجهة أولياء الأمور
+      document.getElementById('showParentView').addEventListener('click', () => {
+        loginContainer.style.display = 'none';
+        parentContainer.style.display = 'flex';
+        loadParentStudentList();
+      });
+      
+      // إغلاق واجهة أولياء الأمور
+      document.getElementById('closeParentBtn').addEventListener('click', () => {
+        parentContainer.style.display = 'none';
+        loginContainer.style.display = 'flex';
+      });
+      
+      // تحميل قائمة الطلاب لأولياء الأمور
+      async function loadParentStudentList() {
+        try {
+          const snapshot = await db.collection('teachers').doc('public').collection('students').get();
+          const select = document.getElementById('parentStudentSelect');
+          select.innerHTML = '<option value="">اختر اسم الطالب</option>';
+          
+          snapshot.forEach(doc => {
+            const option = document.createElement('option');
+            option.value = doc.id;
+            option.textContent = doc.id;
+            select.appendChild(option);
+          });
+          
+          // متابعة تغيير اختيار الطالب
+          select.addEventListener('change', async (e) => {
+            if (e.target.value) {
+              const doc = await db.collection('teachers').doc('public').collection('students').doc(e.target.value).get();
+              if (doc.exists) {
+                renderParentStudentInfo(doc.data());
+              } else {
+                document.getElementById('parentStudentInfo').innerHTML = '<p>لا توجد بيانات لهذا الطالب</p>';
+              }
+            } else {
+              document.getElementById('parentStudentInfo').innerHTML = '';
+            }
+          });
+        } catch (error) {
+          console.error("Error loading parent student list:", error);
+        }
+      }
+      
+      // عرض معلومات الطالب لأولياء الأمور
+      function renderParentStudentInfo(data) {
+        const container = document.getElementById('parentStudentInfo');
+        container.innerHTML = '';
+        
+        if (!data.total) {
+          container.innerHTML = '<p>لا توجد بيانات تقييم لهذا الطالب بعد</p>';
+          return;
+        }
+        
+        // إنشاء عنصر التقييم النهائي
+        const resultCard = document.createElement('div');
+        resultCard.className = 'card';
+        resultCard.innerHTML = `
+          <div class="result-container animate__animated animate__fadeInDown" style="background: rgba(36, 58, 54, 0.85); border: 1px solid #2f4f4f; border-radius: 16px; box-shadow: 0 0 10px #3a766d; color: #f7f1cf;">
+            <div class="result-label">التقييم النهائي</div>
+            <div class="result-value">${data.total}%</div>
+            <div class="result-desc">هذا التقييم يعكس أداء الطالب بناءً على المعايير المحددة</div>
+            <div class="progress-container">
+              <div class="progress-bar" style="width: ${data.total}%"></div>
+            </div>
+          </div>
+        `;
+        container.appendChild(resultCard);
+        
+        // إنشاء بطاقات الإحصائيات
+        const statsGrid = document.createElement('div');
+        statsGrid.className = 'stats-grid';
+        statsGrid.style.marginTop = '20px';
+        
+        const statCards = [
+          { 
+            title: 'الأجزاء المعادلة', 
+            value: data.totalEquivalentParts.toFixed(2),
+            desc: 'إجمالي الأجزاء المحفوظة معادلة'
+          },
+          { 
+            title: 'نقاط الأدب', 
+            value: data.adab,
+            desc: 'من أصل 20 نقطة'
+          },
+          { 
+            title: 'نقاط الحضور', 
+            value: data.delay.toFixed(2),
+            desc: `من أصل 10 نقاط (تأخير ${data.late} دقيقة)`
+          },
+          { 
+            title: 'نقاط الحفظ', 
+            value: data.hifdh.toFixed(2),
+            desc: 'من أصل 65 نقطة'
+          }
+        ];
+        
+        statCards.forEach(card => {
+          const cardEl = document.createElement('div');
+          cardEl.className = 'stat-card';
+          cardEl.innerHTML = `
+            <h4>${card.title}</h4>
+            <div class="value">${card.value}</div>
+            <div class="desc">${card.desc}</div>
+          `;
+          statsGrid.appendChild(cardEl);
+        });
+        
+        container.appendChild(statsGrid);
+        
+        // إنشاء جدول الخصومات
+        if (data.penDetails && data.penDetails.length > 0) {
+          const penaltiesTitle = document.createElement('h3');
+          penaltiesTitle.textContent = 'تفاصيل الخصومات';
+          penaltiesTitle.style.marginTop = '20px';
+          container.appendChild(penaltiesTitle);
+          
+          const table = document.createElement('table');
+          table.className = 'penalties-table';
+          table.innerHTML = `
+            <thead>
+              <tr>
+                <th>نوع التسميع</th>
+                <th>الجزء</th>
+                <th>الصفحات</th>
+                <th>الأخطاء</th>
+                <th>الترددات</th>
+                <th>الخصم</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${data.penDetails.map(item => `
+                <tr>
+                  <td>${item.type}</td>
+                  <td>${item.part}</td>
+                  <td>${item.pages || 'كامل'}</td>
+                  <td>${item.errors}</td>
+                  <td>${item.reps}</td>
+                  <td>${item.totalPenalty.toFixed(2)}</td>
+                </tr>
+              `).join('')}
+              <tr class="total-row">
+                <td colspan="5">إجمالي الخصومات</td>
+                <td>${data.penDetails.reduce((sum, item) => sum + item.totalPenalty, 0).toFixed(2)}</td>
+              </tr>
+            </tbody>
+          `;
+          container.appendChild(table);
+        }
+      }
+      
       // وظائف المساعدة
       function fillSelect(el, from, to) {
         for (let i = from; i <= to; i++) {
@@ -1295,9 +1703,6 @@
       }
 
       // ملء القوائم المنسدلة
-      ['numFull', 'numSub', 'numNew', 'numHW'].forEach(id => 
-        fillSelect(document.getElementById(id), 0, MAX_PARTS));
-
       fillSelect(document.getElementById('adab'), 0, 20);
       fillSelect(document.getElementById('focus'), 1, 3);
 
@@ -1344,16 +1749,49 @@
         cnt.appendChild(row);
       }
 
-      // معالجة تغيير عدد الأجزاء
-      ['numFull', 'numSub', 'numNew', 'numHW'].forEach((id, i) => {
-        document.getElementById(id).addEventListener('change', e => {
-          let ids = ['fullContainer', 'subContainer', 'newContainer', 'hwContainer'];
-          let cnt = document.getElementById(ids[i]);
-          cnt.innerHTML = '';
-          for (let k = 0; k < +e.target.value; k++) {
-            createRow(cnt, ids[i].replace('Container', ''));
-          }
-        });
+      // إضافة وحذف الأجزاء
+      document.getElementById('addFullBtn').addEventListener('click', () => {
+        createRow(document.getElementById('fullContainer'), 'full');
+      });
+      
+      document.getElementById('removeFullBtn').addEventListener('click', () => {
+        const container = document.getElementById('fullContainer');
+        if (container.children.length > 0) {
+          container.removeChild(container.lastChild);
+        }
+      });
+      
+      document.getElementById('addSubBtn').addEventListener('click', () => {
+        createRow(document.getElementById('subContainer'), 'sub');
+      });
+      
+      document.getElementById('removeSubBtn').addEventListener('click', () => {
+        const container = document.getElementById('subContainer');
+        if (container.children.length > 0) {
+          container.removeChild(container.lastChild);
+        }
+      });
+      
+      document.getElementById('addNewBtn').addEventListener('click', () => {
+        createRow(document.getElementById('newContainer'), 'new');
+      });
+      
+      document.getElementById('removeNewBtn').addEventListener('click', () => {
+        const container = document.getElementById('newContainer');
+        if (container.children.length > 0) {
+          container.removeChild(container.lastChild);
+        }
+      });
+      
+      document.getElementById('addHwBtn').addEventListener('click', () => {
+        createRow(document.getElementById('hwContainer'), 'hw');
+      });
+      
+      document.getElementById('removeHwBtn').addEventListener('click', () => {
+        const container = document.getElementById('hwContainer');
+        if (container.children.length > 0) {
+          container.removeChild(container.lastChild);
+        }
       });
 
       // إنشاء قائمة الطلاب مع مؤشر البيانات
@@ -1382,12 +1820,23 @@
         li.classList.add('active');
         document.getElementById('currentName').textContent = `تقييم الطالب: ${name}`;
         let d = studentData[name] || {};
-        ['numFull', 'numSub', 'numNew', 'numHW', 'adab', 'time', 'focus'].forEach(id => {
+        ['adab', 'time', 'focus'].forEach(id => {
           if (d[id] != null) document.getElementById(id).value = d[id];
         });
         document.getElementById('mushaf').checked = d.mushaf || false;
-        ['numFull', 'numSub', 'numNew', 'numHW'].forEach(id => 
-          document.getElementById(id).dispatchEvent(new Event('change')));
+        
+        // تعبئة حقول الأجزاء
+        ['fullContainer', 'subContainer', 'newContainer', 'hwContainer'].forEach(containerId => {
+          const container = document.getElementById(containerId);
+          container.innerHTML = '';
+          
+          if (d[containerId] && Array.isArray(d[containerId])) {
+            d[containerId].forEach(() => {
+              createRow(container, containerId.replace('Container', ''));
+            });
+          }
+        });
+        
         document.getElementById('statsSection').style.display = 'block';
         document.getElementById('rankingSection').style.display = 'block';
         document.getElementById('penaltiesSection').style.display = 'block';
@@ -1543,10 +1992,10 @@
           adab: +document.getElementById('adab').value,
           focus: +document.getElementById('focus').value,
           time: document.getElementById('time').value,
-          numFull: +document.getElementById('numFull').value,
-          numSub: +document.getElementById('numSub').value,
-          numNew: +document.getElementById('numNew').value,
-          numHW: +document.getElementById('numHW').value
+          numFull: document.getElementById('fullContainer').children.length,
+          numSub: document.getElementById('subContainer').children.length,
+          numNew: document.getElementById('newContainer').children.length,
+          numHW: document.getElementById('hwContainer').children.length
         };
 
         const containers = {
@@ -1916,7 +2365,7 @@
           document.getElementById('mushafPoints').textContent = '0';
           
           // إعادة تعيين حقول الإدخال
-          ['numFull', 'numSub', 'numNew', 'numHW', 'adab', 'time', 'focus'].forEach(id => {
+          ['adab', 'time', 'focus'].forEach(id => {
             document.getElementById(id).value = '';
           });
           document.getElementById('mushaf').checked = false;
@@ -1956,7 +2405,7 @@
           document.getElementById('rankingBody').innerHTML = '';
           
           // إعادة تعيين حقول الإدخال
-          ['numFull', 'numSub', 'numNew', 'numHW', 'adab', 'time', 'focus'].forEach(id => {
+          ['adab', 'time', 'focus'].forEach(id => {
             document.getElementById(id).value = '';
           });
           document.getElementById('mushaf').checked = false;
@@ -1977,7 +2426,26 @@
         if (!currentUser) return;
         
         try {
+          // حفظ بيانات الطالب للمعلم
           await db.collection('teachers').doc(currentUser.uid).collection('students').doc(studentName).set(data);
+          
+          // حفظ نسخة للقراءة فقط لأولياء الأمور (بدون معلومات حساسة)
+          const publicData = {
+            name: studentName,
+            total: data.total,
+            totalEquivalentParts: data.totalEquivalentParts,
+            adab: data.adab,
+            delay: data.delay,
+            late: data.late,
+            hifdh: data.hifdh,
+            focus: data.focus,
+            mushaf: data.mushaf,
+            penDetails: data.penDetails,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          };
+          
+          await db.collection('teachers').doc('public').collection('students').doc(studentName).set(publicData);
+          
           firebaseStatus.textContent = "تم حفظ بيانات الطالب بنجاح";
           firebaseStatus.style.background = "rgba(39, 174, 96, 0.7)";
         } catch (error) {
@@ -2025,6 +2493,7 @@
         
         try {
           await db.collection('teachers').doc(currentUser.uid).collection('students').doc(studentName).delete();
+          await db.collection('teachers').doc('public').collection('students').doc(studentName).delete();
           firebaseStatus.textContent = "تم حذف بيانات الطالب بنجاح";
           firebaseStatus.style.background = "rgba(39, 174, 96, 0.7)";
         } catch (error) {
@@ -2039,14 +2508,22 @@
         if (!currentUser) return;
         
         try {
+          // حذف بيانات الطلاب للمعلم
           const snapshot = await db.collection('teachers').doc(currentUser.uid).collection('students').get();
-          
           const batch = db.batch();
           snapshot.forEach(doc => {
             batch.delete(doc.ref);
           });
-          
           await batch.commit();
+          
+          // حذف بيانات الطلاب لأولياء الأمور
+          const publicSnapshot = await db.collection('teachers').doc('public').collection('students').get();
+          const publicBatch = db.batch();
+          publicSnapshot.forEach(doc => {
+            publicBatch.delete(doc.ref);
+          });
+          await publicBatch.commit();
+          
           firebaseStatus.textContent = "تم مسح جميع البيانات بنجاح";
           firebaseStatus.style.background = "rgba(39, 174, 96, 0.7)";
         } catch (error) {
@@ -2073,6 +2550,12 @@
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
           });
           
+          // إضافة الطالب إلى القائمة العامة لأولياء الأمور
+          await db.collection('teachers').doc('public').collection('students').doc(name).set({
+            name: name,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+          
           // إضافة الطالب إلى القائمة المحلية
           students.push(name);
           createStudentList();
@@ -2094,5 +2577,19 @@
       initializeFirebase();
     });
   </script>
+<audio id="soundSuccess" preload="auto" src="https://cdn.pixabay.com/download/audio/2022/02/10/audio_c29fe2bb2e.mp3?filename=success-1-6297.mp3"></audio>
+<audio id="soundClick" preload="auto" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_bf1140d435.mp3?filename=notification-pop-2-18620.mp3"></audio>
+<script>
+  function playSound(id) {
+    const audio = document.getElementById(id);
+    if (audio) audio.play();
+  }
+
+  document.getElementById('parentStudentSelect')?.addEventListener('change', () => playSound('soundClick'));
+  document.getElementById('closeParentBtn')?.addEventListener('click', () => playSound('soundClick'));
+</script>
+<audio autoplay="" hidden="" id="welcomeSound">
+<source src="https://cdn.pixabay.com/download/audio/2022/03/26/audio_676b28493d.mp3?filename=subtle-soft-chime-110124.mp3" type="audio/mpeg"/>
+</audio>
 </body>
 </html>
