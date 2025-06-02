@@ -1376,17 +1376,7 @@
 <section class="stats-section" id="statsSection">
 <h3>تفاصيل التقييم</h3>
 <div class="stats-grid" id="statsList"></div>
-<div class="stats-grid">
-<div class="focus-card">
-<h4>نقاط الحفظ للتركيز</h4>
-<div class="value" id="focusPoints">0</div>
-<div class="desc">من أصل 3 نقاط</div>
-</div>
-<div class="mushaf-card">
-<h4>نقاط إحضار المصحف</h4>
-<div class="value" id="mushafPoints">0</div>
-<div class="desc">من أصل نقطتين</div>
-</div>
+
 </div>
 <div class="detail-section" id="penaltiesSection">
 <h4>تفاصيل الخصومات</h4>
@@ -1445,11 +1435,11 @@
     document.addEventListener('DOMContentLoaded', () => {
       // بيانات الصعوبة
       const diff = {
-        1: 2, 2: 0.8, 3: 1.5, 4: 1.5, 5: 1.5, 6: 1.5, 7: 0.8,
-        8: 0.8, 9: 1.5, 10: 1.5, 11: 0.8, 12: 1.5, 13: 1.5,
-        14: 0.6, 15: 2, 16: 2, 17: 0.8, 18: 0.8, 19: 1.5,
-        20: 1.5, 21: 1.5, 22: 1.5, 23: 0.8, 24: 1.5, 25: 0.6,
-        26: 0.8, 27: 0.8, 28: 0.6, 29: 1.5, 30: 2.2
+        1: 1.8, 2: 1.5, 3: 1.5, 4: 1.5, 5: 1, 6: 1.5, 7: 1,
+        8: 1, 9: 1, 10: 1.5, 11: 1, 12: 1.5, 13: 1.5,
+        14: 0.8, 15: 2, 16: 1.8, 17: 1.5, 18: 1.5, 19: 1.5,
+        20: 1, 21: 1.5, 22: 1.5, 23: 1, 24: 1.8, 25: 1,
+        26: 1, 27: 1.8, 28: 1, 29: 1.8, 30: 2
       };
 
       // قائمة الطلاب
@@ -1616,7 +1606,7 @@
         resultCard.className = 'card';
         resultCard.innerHTML = `
           <div class="result-container animate__animated animate__fadeInDown" style="background: rgba(36, 58, 54, 0.85); border: 1px solid #2f4f4f; border-radius: 16px; box-shadow: 0 0 10px #3a766d; color: #f7f1cf;">
-            <div class="result-label">التقييم النهائي</div>
+            <div class="result-label">التقييم الحالي</div>
             <div class="result-value">${data.total}%</div>
             <div class="result-desc">هذا التقييم يعكس أداء الطالب بناءً على المعايير المحددة</div>
             <div class="progress-container">
@@ -1633,24 +1623,14 @@
         
         const statCards = [
           { 
-            title: 'الأجزاء المعادلة', 
+            title: 'الأجزاء المكتملة', 
             value: data.totalEquivalentParts.toFixed(2),
-            desc: 'إجمالي الأجزاء المحفوظة معادلة'
-          },
-          { 
-            title: 'نقاط الأدب', 
-            value: data.adab,
-            desc: 'من أصل 20 نقطة'
-          },
-          { 
-            title: 'نقاط الحضور', 
-            value: data.delay.toFixed(2),
-            desc: `من أصل 10 نقاط (تأخير ${data.late} دقيقة)`
+            desc: 'إجمالي الأجزاء المسمعة بالكامل'
           },
           { 
             title: 'نقاط الحفظ', 
             value: data.hifdh.toFixed(2),
-            desc: 'من أصل 65 نقطة'
+            desc: 'من أصل 100 نقطة'
           }
         ];
         
@@ -1857,14 +1837,19 @@
         document.getElementById('rankingSection').style.display = 'block';
         document.getElementById('penaltiesSection').style.display = 'block';
         
+        
+        // تعويض القيم المحذوفة لتجنب مشاكل الجلب
+        d.focus = 0;
+        d.mushaf = false;
+
         // تحديث تفاصيل الطالب إذا كان لديه بيانات
         if (d.total != null) {
           document.getElementById('result').textContent = d.total + '%';
           document.getElementById('progressBar').style.width = d.total + '%';
           renderStats(d);
           renderPenalties(d);
-          document.getElementById('focusPoints').textContent = d.focus;
-          document.getElementById('mushafPoints').textContent = d.mushaf ? 2 : 0;
+          
+          
         }
         
         // تعبئة حقول الأخطاء والتكرارات بعد إنشاء الحقول
@@ -1931,19 +1916,13 @@
             desc: 'إجمالي الأجزاء المحفوظة معادلة'
           },
           { 
-            title: 'نقاط الأدب', 
-            value: d.adab,
-            desc: 'من أصل 20 نقطة'
+            title: 'نقاط الأدب', value: 0, desc: 'موقوفة مؤقتاً'
           },
           { 
-            title: 'نقاط الحضور', 
-            value: d.delay.toFixed(2),
-            desc: `من أصل 10 نقاط (تأخير ${d.late} دقيقة)`
+            title: 'نقاط الحضور', value: 0, desc: 'موقوفة مؤقتاً'
           },
           { 
-            title: 'نقاط الحفظ', 
-            value: d.hifdh.toFixed(2),
-            desc: 'من أصل 65 نقطة'
+            title: 'نقاط الحفظ', value: d.hifdh.toFixed(2), desc: 'من أصل 100 نقطة'
           }
         ];
         
@@ -2049,8 +2028,8 @@
         // حساب الخصومات
         allItems.forEach(item => {
           const coeff = diff[item.part] || 0;
-          const repsPenalty = (0.5 * item.reps * coeff) / d.totalEquivalentParts;
-          const errorsPenalty = (2 * item.errors * coeff) / d.totalEquivalentParts;
+          const repsPenalty = (0.2 * item.reps * coeff) / d.totalEquivalentParts;
+          const errorsPenalty = (0.8 * item.errors * coeff) / d.totalEquivalentParts;
           const totalPenalty = repsPenalty + errorsPenalty;
           
           d.penDetails.push({
@@ -2065,12 +2044,12 @@
         // حساب نقاط الحضور
         const [sh, sm] = [5, 30];
         const [h, m] = d.time.split(':').map(Number);
-        d.late = Math.max(0, h * 60 + m - (sh * 60 + sm));
-        d.delay = d.late >= 180 ? 0 : (1 - d.late / 180) * 10;
+        d.late = 0;
+        d.delay = 0;
 
         // حساب النقاط النهائية
-        d.hifdh = Math.max(0, 65 - d.penDetails.reduce((s, p) => s + p.totalPenalty, 0));
-        d.total = +(((d.adab + d.delay + d.hifdh + d.focus + (d.mushaf ? 2 : 0))).toFixed(2));
+        d.hifdh = Math.max(0, 100 - d.penDetails.reduce((s, p) => s + p.totalPenalty, 0));
+        d.total = +d.hifdh.toFixed(2);
         studentData[current] = d;
         
         // حفظ البيانات في Firebase
@@ -2089,8 +2068,8 @@
         document.getElementById('progressBar').style.width = d.total + '%';
         renderStats(d);
         renderPenalties(d);
-        document.getElementById('focusPoints').textContent = d.focus;
-        document.getElementById('mushafPoints').textContent = d.mushaf ? 2 : 0;
+        
+        
         updateDashboard();
       });
 
@@ -2210,32 +2189,27 @@
               <tr>
                 <th style="padding: 8px; border: 1px solid #ddd; background-color: #1a5f5a; color: white;">المعيار</th>
                 <th style="padding: 8px; border: 1px solid #ddd; background-color: #1a5f5a; color: white;">القيمة</th>
-                <th style="padding: 8px; border: 1px solid #ddd; background-color: #1a5f5a; color: white;">المعيار</th>
-                <th style="padding: 8px; border: 1px solid #ddd; background-color: #1a5f5a; color: white;">القيمة</th>
+
               </tr>
               <tr>
                 <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">الأجزاء الكاملة</td>
                 <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${student.numFull || 0}</td>
-                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">نقاط الأدب</td>
-                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${student.adab}/20</td>
+
               </tr>
               <tr>
                 <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">الأجزاء الجزئية</td>
                 <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${student.numSub || 0}</td>
-                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">نقاط الحضور</td>
-                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${student.delay.toFixed(2)}/10</td>
+
               </tr>
               <tr>
                 <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">التسميع الجديد</td>
                 <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${student.numNew || 0}</td>
-                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">التركيز</td>
-                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${student.focus}/3</td>
+
               </tr>
               <tr>
                 <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">جزء الواجب</td>
                 <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${student.numHW || 0}</td>
-                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">إحضار المصحف</td>
-                <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${student.mushaf ? 'نعم' : 'لا'}</td>
+
               </tr>
             </table>
           </div>
@@ -2377,8 +2351,8 @@
           document.getElementById('progressBar').style.width = '0%';
           document.getElementById('statsList').innerHTML = '';
           document.getElementById('penaltiesBody').innerHTML = '';
-          document.getElementById('focusPoints').textContent = '0';
-          document.getElementById('mushafPoints').textContent = '0';
+          
+          
           
           // إعادة تعيين حقول الإدخال
           ['adab', 'time', 'focus'].forEach(id => {
@@ -2416,8 +2390,8 @@
           document.getElementById('progressBar').style.width = '0%';
           document.getElementById('statsList').innerHTML = '';
           document.getElementById('penaltiesBody').innerHTML = '';
-          document.getElementById('focusPoints').textContent = '0';
-          document.getElementById('mushafPoints').textContent = '0';
+          
+          
           document.getElementById('rankingBody').innerHTML = '';
           
           // إعادة تعيين حقول الإدخال
