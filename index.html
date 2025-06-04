@@ -1201,7 +1201,14 @@
   #parentContainer::before {
     top: 25px;
   }
-  
+  table {
+    min-width: 0 !important;
+    width: 100% !important;
+    font-size: 8px !important;
+  }
+  table th {
+    padding: 10px 0;
+  }
   #parentContainer::after {
     top: 300px;
   }
@@ -1446,7 +1453,7 @@
 <table class="penalties-table animate__animated animate__fadeIn" style="background:rgba(0,0,0,0.25);color:#f0f0f0;border-radius:12px;">
 <thead>
 <tr>
-<th>نوع التسميع</th>
+<th>النوع</th>
 <th>الجزء</th>
 <th>الصفحات</th>
 <th>الأخطاء</th>
@@ -1725,7 +1732,7 @@
           table.innerHTML = `
             <thead>
               <tr>
-                <th>نوع التسميع</th>
+                <th>النوع</th>
                 <th>الجزء</th>
                 <th>الصفحات</th>
                 <th>الأخطاء</th>
@@ -2284,7 +2291,7 @@
             <div style="background: #d4af37; color: white; padding: 8px; border-radius: 3px; margin-bottom: 10px; font-size: 14pt;">تفاصيل الخصومات</div>
             <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 11pt;">
               <tr>
-                <th style="padding: 8px; border: 1px solid #ddd; background-color: #d4af37; color: white;">نوع التسميع</th>
+                <th style="padding: 8px; border: 1px solid #ddd; background-color: #d4af37; color: white;">النوع</th>
                 <th style="padding: 8px; border: 1px solid #ddd; background-color: #d4af37; color: white;">الجزء</th>
                 <th style="padding: 8px; border: 1px solid #ddd; background-color: #d4af37; color: white;">الصفحات</th>
                 <th style="padding: 8px; border: 1px solid #ddd; background-color: #d4af37; color: white;">الأخطاء</th>
